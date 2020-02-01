@@ -12,6 +12,24 @@ from minkfncts2d import MF2D
 file1 = fits.getdata("/home/aillet/Bureau/Infromatique/programmation/ProjetS4/photo/1.fits")
 file1 = np.float64(file1)
 
+
+def contrast_fantome(file1):
+    file1 = np.float64(file1)
+    file1 = ((file1 - 128) / 128) * (np.pi / 2)
+    file1 = 3 * np.tanh(file1) + 3
+    file1 = (file1 * 128) / 3
+    file2 = []
+    for i in range(len(file1)):
+        file3 = []
+        for c in range(len(file1[i])):
+            if not np.isnan(file1[i][c]):
+                file3 += [file1[i][c]]
+        if file3 != []:
+            file2 += [file3]
+    hdu = fits.PrimaryHDU()
+    hdu.data = file2
+    hdu.writeto('cf_%d.fits'%file1)  '''creer un fichier fits tout bien comme on veut '''
+
 F = []
 U = []
 Chi = []
