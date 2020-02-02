@@ -37,12 +37,16 @@ def main(myFile):
     name = myFile.split("/")
     name = name[-1]
 
+    max_lin = 40
+    if args.max:
+        max_lin = args.max
+
 
     F = []
     U = []
     Chi = []
 
-    for threshold in np.linspace(0.0, 40, 100):
+    for threshold in np.linspace(0.0, args.max, 100):
         (f, u, chi) = MF2D(file1, threshold)
         F.append(f)
         U.append(u)
@@ -59,7 +63,7 @@ def main(myFile):
     os.remove("temp.fits")
     fig.add_subplot(122)
     #plt.clf()
-    x = np.linspace(0.0, 40, 100)
+    x = np.linspace(0.0, args.max, 100)
     plt.plot(x, F, x, U, x, Chi)
     plt.title("2D Minkowski Functions")
     plt.legend(["F (Area)", "U (Boundary)", "$\chi$ (Euler characteristic)"], bbox_to_anchor =(1,-0.2), loc = "upper right")
@@ -82,6 +86,7 @@ def init_args():
     parser.add_argument("file", help='file in fits format', type=str)
     parser.add_argument("-o", dest="output", help="remove input spacing", type = str)
     parser.add_argument("-s", "--save",action="store_true", help="save result without showing")
+    parser.add_argument("-m", dest="max", help="maximum of the linear space", type = int)
     args = parser.parse_args()
 
 
