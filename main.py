@@ -3,6 +3,7 @@ import numpy as np
 from astropy.io import fits
 from minkfncts2d import MF2D
 import argparse
+import os
 
 
 def contrast_fantome(file1):
@@ -20,7 +21,7 @@ def contrast_fantome(file1):
             file2 += [file3]
     hdu = fits.PrimaryHDU()
     hdu.data = file2
-    hdu.writeto('cf_%d.fits'%file1)  #creer un fichier fits tout bien comme on veut
+    hdu.writeto('temp.fits')  #creer un fichier fits tout bien comme on veut
 
 
 
@@ -29,6 +30,8 @@ def main(myFile):
 
     # Modifier le lien de l'image pour l'ouvrir
     file1 = fits.getdata(myFile)
+    contrast_fantome(file1)
+    file1 = fits.getdata("temp.fits")
     file1 = np.float64(file1)
 
     name = myFile.split("/")
@@ -39,7 +42,7 @@ def main(myFile):
     U = []
     Chi = []
 
-    for threshold in np.linspace(0.0, 1.0, 100):
+    for threshold in np.linspace(0.0, 40, 100):
         (f, u, chi) = MF2D(file1, threshold)
         F.append(f)
         U.append(u)
@@ -52,9 +55,11 @@ def main(myFile):
     plt.imshow(file1, cmap="viridis")
     #plt.show()
 
+    print(Chi)
+    os.remove("temp.fits")
     fig.add_subplot(122)
     #plt.clf()
-    x = np.linspace(0.0, 1.0, 100)
+    x = np.linspace(0.0, 40, 100)
     plt.plot(x, F, x, U, x, Chi)
     plt.title("2D Minkowski Functions")
     plt.legend(["F (Area)", "U (Boundary)", "$\chi$ (Euler characteristic)"], bbox_to_anchor =(1,-0.2), loc = "upper right")
