@@ -5,6 +5,12 @@ from minkfncts2d import MF2D
 import argparse
 import os,sys
 
+from astropy.io import fits
+from astropy.utils.data import get_pkg_data_filename
+from astropy.convolution import Gaussian2DKernel
+from scipy.signal import convolve as scipy_convolve
+from astropy.convolution import convolve
+
 
 def contrast(file1):
     file1 = np.float64(file1)
@@ -49,6 +55,20 @@ def main(myFile):
     F = []
     U = []
     Chi = []
+
+    img = file1
+
+    img_zerod = img.copy()
+    img_zerod[np.isnan(img)] = 0
+
+    # We smooth with a Gaussian kernel with x_stddev=1 (and y_stddev=1)
+    # It is a 9x9 array
+    kernel = Gaussian2DKernel(x_stddev=1)
+
+
+    # Convolution: scipy's direct convolution mode spreads out NaNs (see
+    # panel 2 below)
+    #file1 = scipy_convolve(img, kernel, mode='same', method='direct')
 
     for threshold in np.linspace(0.0, max_lin, 100):
         (f, u, chi) = MF2D(file1, threshold)
