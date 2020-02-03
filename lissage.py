@@ -25,8 +25,16 @@ def fantom(file1):
     return file2
 
 
+def contrast(file1):
+    file1 = np.float64(file1)
+    file1 = ((file1 - 128) / 128) * (np.pi / 2)
+    file1 = 1*np.tanh(file1) + 1
+    file1 = (file1 * 128) / 1
+    return file1
+
+
 filename = get_pkg_data_filename('ds92.fits')
-filename = fantom(filename)
+#filename = fantom(filename)
 hdu = fits.open(filename)[0]
 
 # Scale the file to have reasonable numbers
@@ -39,6 +47,11 @@ hdu = fits.open(filename)[0]
 # brightest pixels to NaN to simulate a "saturated" data set
 #img[img > 2e1] = np.nan
 img = hdu.data
+img = fits.getdata("ds92.fits")
+img = fantom(img)
+img = contrast(img)
+plt.imshow(img)
+plt.show()
 # We also create a copy of the data and set those NaNs to zero.  We will
 # use this for the scipy convolution
 img_zerod = img.copy()
