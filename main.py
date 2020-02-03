@@ -68,7 +68,7 @@ def main(myFile):
 
     # Convolution: scipy's direct convolution mode spreads out NaNs (see
     # panel 2 below)
-    #file1 = scipy_convolve(img, kernel, mode='same', method='direct')
+    file1 = scipy_convolve(img, kernel, mode='same', method='direct')
 
     for threshold in np.linspace(0.0, max_lin, 100):
         (f, u, chi) = MF2D(file1, threshold)
@@ -93,7 +93,7 @@ def main(myFile):
     plt.tight_layout()
     if args.save:
         print(name[:-5])
-        plt.savefig(name[:-5]+".png")
+        plt.savefig(args.save + "/" + name[:-5]+".png")
     else:
         plt.show()
 
@@ -108,7 +108,7 @@ def init_args():
     parser = argparse.ArgumentParser(description='TakeMeOn')
     parser.add_argument("file", help='file in fits format', type=str)
     parser.add_argument("-o", dest="output", help="remove input spacing", type = str)
-    parser.add_argument("-s", "--save",action="store_true", help="save result without showing")
+    parser.add_argument("-s", "--save", help="save at the specified path (no showing)", type=str)
     parser.add_argument("-c", "--contrast",action="store_true", help="with contrast")
     parser.add_argument("-m", dest="max", help="maximum of the linear space", type = int)
     parser.add_argument("-n", "--normalize", action="store_true", help="normalize the curves")
