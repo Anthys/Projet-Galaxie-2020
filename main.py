@@ -21,7 +21,7 @@ def contrast_fantome(file1):
             file2 += [file3]
     hdu = fits.PrimaryHDU()
     hdu.data = file2
-    print(file2)
+    # print(file2)
     return file2
 
 
@@ -31,7 +31,8 @@ def main(myFile):
 
     # Modifier le lien de l'image pour l'ouvrir
     file1 = fits.getdata(myFile)
-    file1 = contrast_fantome(file1)
+    if args.contrast:
+        file1 = contrast_fantome(file1)
     file1 = np.float64(file1)
     name = myFile.split("/")
     name = name[-1]
@@ -57,7 +58,7 @@ def main(myFile):
 
     fig.add_subplot(122)
     x = np.linspace(0.0, max_lin, 100)
-    plt.plot(x, F, x, U, x, Chi)
+    plt.plot(x, np.array(F)/np.max(F), x, np.array(U)/np.max(U), x, np.array(Chi)/np.max(Chi))
     plt.title("2D Minkowski Functions")
     plt.legend(["F (Area)", "U (Boundary)", "$\chi$ (Euler characteristic)"], bbox_to_anchor =(1,-0.2), loc = "upper right")
     plt.xlabel("Threshold")
@@ -79,6 +80,7 @@ def init_args():
     parser.add_argument("file", help='file in fits format', type=str)
     parser.add_argument("-o", dest="output", help="remove input spacing", type = str)
     parser.add_argument("-s", "--save",action="store_true", help="save result without showing")
+    parser.add_argument("-c", "--contrast",action="store_true", help="with contrast")
     parser.add_argument("-m", dest="max", help="maximum of the linear space", type = int)
     args = parser.parse_args()
 
