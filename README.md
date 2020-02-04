@@ -7,8 +7,10 @@
 
   - Le chemin vers le fichier fits peut être absolu ou relatif.
   - Les arguments optionels et leurs utilisations peuvent être vus avec `python main.py --h`
+  - Utilisez l'argument `-cool` pour faire un lissage, une normalisation, un contraste tangentiel et l'élimination des pixels invisibles.
+
 
 ### Exemple de résultat:
   ![alt text][Test1]
 
-[Test1]: img/2.png "SuperLesFonctionelles"
+[Test1]: img/yesyes.png "SuperLesFonctionelles"
