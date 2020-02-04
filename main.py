@@ -39,12 +39,21 @@ def main(myFile):
     global args
 
     # Modifier le lien de l'image pour l'ouvrir
-    file1 = fits.getdata(myFile)
+
+    if args.dat:
+        file1 = np.loadtxt(myFile)
+        #file1 = open(myFile)
+        #file1 = file1.read()
+        file1 = np.float64(file1)
+        #print(1)
+    else:
+        file1 = fits.getdata(myFile)
+        file1 = np.float64(file1)
     if args.fantom:
         file1 = fantom(file1)
     if args.contrast:
         file1 = contrast(file1)
-    file1 = np.float64(file1)
+        
     name = myFile.split("/")
     name = name[-1]
 
@@ -55,21 +64,19 @@ def main(myFile):
     F = []
     U = []
     Chi = []
+    if args.smooth:
+        img = file1
+        img_zerod = img.copy()
+        img_zerod[np.isnan(img)] = 0
 
-    img = file1
-
-    img_zerod = img.copy()
-    img_zerod[np.isnan(img)] = 0
-
-    # We smooth with a Gaussian kernel with x_stddev=1 (and y_stddev=1)
-    # It is a 9x9 array
-    kernel = Gaussian2DKernel(x_stddev=1)
+        # We smooth with a Gaussian kernel with x_stddev=1 (and y_stddev=1)
+        # It is a 9x9 array
+        kernel = Gaussian2DKernel(x_stddev=1)
 
 
-    # Convolution: scipy's direct convolution mode spreads out NaNs (see
-    # panel 2 below)
-    file1 = scipy_convolve(img, kernel, mode='same', method='direct')
-
+        # Convolution: scipy's direct convolution mode spreads out NaNs (see
+        # panel 2 below)
+        file1 = scipy_convolve(img, kernel, mode='same', method='direct')
     for threshold in np.linspace(0.0, max_lin, 100):
         (f, u, chi) = MF2D(file1, threshold)
         F.append(f)
@@ -113,6 +120,8 @@ def init_args():
     parser.add_argument("-m", dest="max", help="maximum of the linear space", type = int)
     parser.add_argument("-n", "--normalize", action="store_true", help="normalize the curves")
     parser.add_argument("-f", "--fantom", action="store_true", help="delete the NaN pixels")
+    parser.add_argument("-dat", "--dat", action="store_true", help="file is in dat format")
+    parser.add_argument("-smooth", "--smooth", action="store_true", help="smooth")
     args = parser.parse_args()
 
 
