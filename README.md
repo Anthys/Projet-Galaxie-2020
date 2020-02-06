@@ -14,6 +14,6 @@
   ![alt text][Test1]
 
 ### Tous les résultats:
-  (lien)[all_res.md]
+  [lien](all_res.md)
 
 [Test1]: img/yesyes.png "SuperLesFonctionelles"
