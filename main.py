@@ -42,6 +42,9 @@ def main(myFile):
 
     name = myFile.split("/")
     name = name[-1]
+    if "." in name:
+        name = name.split(".")
+        name = name[-2]
 
     # Récupérer le fichier
     if args.dat:
@@ -108,8 +111,8 @@ def main(myFile):
 
     # Fin
     if args.save:
-        print(name[:-5])
-        plt.savefig(args.save + "/" + name[:-5]+".png")
+        print(name)
+        plt.savefig(args.save + "/" +name +".png")
     else:
         plt.show()
 
