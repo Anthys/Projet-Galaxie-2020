@@ -93,27 +93,34 @@ def main(myFile):
 
     param = args.functional
 
+    draw_all = args.drawall
+
     if args.smooth:
         F, U, Chi = calcul_fonctionelles(file1, max_lin)
-        h = get_right(F,U,Chi, param)
-        if args.normalize:
-            plt.plot(x, np.array(h)/np.max(h), color=(1,0,0,1) )#, x, np.array(U)/np.max(U), x, np.array(Chi)/np.max(Chi))
-        else:
-            plt.plot(x, F, x, U, x, Chi)
+        le_liste = [param]
+        if draw_all:
+            le_liste = ["f","u","chi"]
+        for i in le_liste:
+            h,col = get_right(F,U,Chi, i)
+            b = np.max(h)
+            if args.nonorm:
+                b = 1
+            plt.plot(x, np.array(h)/b, color=col + [1] )
 
         for i in range(1,args.smooth):
             a_values = np.linspace(0.01,1,args.smooth+1)
             temp_file1 = smooth_file(file1, i)
             F, U, Chi = calcul_fonctionelles(temp_file1, max_lin)
-            h = get_right(F,U,Chi, param)
-            if args.normalize:
-                plt.plot(x, np.array(h)/np.max(h), color = (1,0,0,a_values[-i-1]) )#, x, np.array(U)/np.max(U), x, np.array(Chi)/np.max(Chi))
-            else:
-                plt.plot(x, F, x, U, x, Chi)
+            for j in le_liste:
+                h,col = get_right(F,U,Chi, j)
+                b = np.max(h)
+                if args.nonorm:
+                    b = 1
+                plt.plot(x, np.array(h)/b, color=col +[a_values[-i-1]] )
     
-    
-    plt.title("2D Minkowski Functions")
-    plt.legend(["F (Area)", "U (Boundary)", "$\chi$ (Euler characteristic)"], bbox_to_anchor =(1,-0.2), loc = "upper right")
+    plt.title("2D Minkowski Functionals")
+    #plt.legend(["F (Area)", "U (Boundary)", "$\chi$ (Euler characteristic)"], bbox_to_anchor =(1,-0.2), loc = "upper right")
+    plt.legend(le_liste, bbox_to_anchor =(1,-0.2), loc = "upper right")
     plt.xlabel("Threshold")
     plt.tight_layout()
 
@@ -128,11 +135,11 @@ def main(myFile):
 
 def get_right(F,U,chi,arg):
     if arg == "f":
-        return F
+        return F, [1,0,0]
     elif arg == "u":
-        return U
+        return U, [0,1,0]
     elif arg == "chi":
-        return chi
+        return chi, [0,0,1]
 
 def calcul_fonctionelles(file1, max_treshold):
     F = []
@@ -163,6 +170,8 @@ def init_args():
     parser.add_argument("-smooth", "--smooth", type = int, help="smooth")
     parser.add_argument("-n", "--name", type = str, help="name of file")
     parser.add_argument("-f", "--functional", type = str, help="name of functional to show",choices=['f', 'u', 'chi'], default = "chi")
+    parser.add_argument("-all", "--drawall", action="store_true",help="draw all functionals")
+    parser.add_argument("-nonorm", "--nonorm", action="store_true",help="No normalisation")
     args = parser.parse_args()
 
     args.cool = True
