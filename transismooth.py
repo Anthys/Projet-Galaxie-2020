@@ -80,30 +80,38 @@ def main(myFile):
     if type(args.max) == int:
         max_lin = args.max
 
-    # Lissage de la fonction
-    if args.smooth:
-        file1 = smooth_file(file1, args.smooth)
-    
-
-
-    # Calcul des fonctionelles
-
-    F, U, Chi = calcul_fonctionelles(file1, max_lin)
-    
-
-    # Visuels 
-
     fig = plt.figure(figsize = (8,5))
     fig.add_subplot(121)
     plt.title("Galaxy")
     plt.imshow(file1, cmap="viridis")
 
+
     fig.add_subplot(122)
     x = np.linspace(0.0, max_lin, 100)
-    if args.normalize:
-        plt.plot(x, np.array(F)/np.max(F), x, np.array(U)/np.max(U), x, np.array(Chi)/np.max(Chi))
-    else:
-        plt.plot(x, F, x, U, x, Chi)
+
+    # Lissage de la fonction
+
+    param = args.functional
+
+    if args.smooth:
+        F, U, Chi = calcul_fonctionelles(file1, max_lin)
+        h = get_right(F,U,Chi, param)
+        if args.normalize:
+            plt.plot(x, np.array(h)/np.max(h), color=(1,0,0,1) )#, x, np.array(U)/np.max(U), x, np.array(Chi)/np.max(Chi))
+        else:
+            plt.plot(x, F, x, U, x, Chi)
+
+        for i in range(1,args.smooth):
+            a_values = np.linspace(0.01,1,args.smooth+1)
+            temp_file1 = smooth_file(file1, i)
+            F, U, Chi = calcul_fonctionelles(temp_file1, max_lin)
+            h = get_right(F,U,Chi, param)
+            if args.normalize:
+                plt.plot(x, np.array(h)/np.max(h), color = (1,0,0,a_values[-i-1]) )#, x, np.array(U)/np.max(U), x, np.array(Chi)/np.max(Chi))
+            else:
+                plt.plot(x, F, x, U, x, Chi)
+    
+    
     plt.title("2D Minkowski Functions")
     plt.legend(["F (Area)", "U (Boundary)", "$\chi$ (Euler characteristic)"], bbox_to_anchor =(1,-0.2), loc = "upper right")
     plt.xlabel("Threshold")
@@ -111,10 +119,20 @@ def main(myFile):
 
     # Fin
     if args.save:
+        if args.name:
+            name = args.name
         print(name)
         plt.savefig(args.save + "/" +name +".png")
     else:
         plt.show()
+
+def get_right(F,U,chi,arg):
+    if arg == "f":
+        return F
+    elif arg == "u":
+        return U
+    elif arg == "chi":
+        return chi
 
 def calcul_fonctionelles(file1, max_treshold):
     F = []
@@ -139,16 +157,15 @@ def init_args():
     parser.add_argument("file", help='file in fits format', type=str)
     parser.add_argument("-o", dest="output", help="remove input spacing", type = str)
     parser.add_argument("-s", "--save", help="save at the specified path (no showing)", type=str)
-    parser.add_argument("-cT", "--contrast",action="store_true", help="Contraste tangeante hyperbolique")
-    parser.add_argument("-cL", "--contrastLinear", help="multiply contrast by x", type = int)
+    parser.add_argument("-cL", "--contrastLinear", help="multiply contrast by x", type = int, default=40)
     parser.add_argument("-m", dest="max", help="maximum of the linear space", type = int)
-    parser.add_argument("-n", "--normalize", action="store_true", help="normalize the curves")
-    parser.add_argument("-f", "--fantom", action="store_true", help="delete the NaN pixels")
     parser.add_argument("-dat", "--dat", action="store_true", help="file is in dat format")
     parser.add_argument("-smooth", "--smooth", type = int, help="smooth")
-    parser.add_argument("-cool", "--cool", action="store_true", help="ContrastTangeante+Normalize+Fantom+Smooth")
+    parser.add_argument("-n", "--name", type = str, help="name of file")
+    parser.add_argument("-f", "--functional", type = str, help="name of functional to show",choices=['f', 'u', 'chi'], default = "chi")
     args = parser.parse_args()
 
+    args.cool = True
     if args.cool:
         args.contrast = True
         args.normalize = True
@@ -156,6 +173,8 @@ def init_args():
             args.smooth = 1
 
     args.fantom = True
+
+    #sys.exit(0)
 
 
 if __name__ == "__main__":
