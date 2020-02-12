@@ -5,6 +5,8 @@ from minkfncts2d import MF2D
 import argparse
 import os,sys
 
+sys.path.insert(1, 'libs/')
+
 from astropy.io import fits
 from astropy.utils.data import get_pkg_data_filename
 from astropy.convolution import Gaussian2DKernel
