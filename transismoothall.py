@@ -11,6 +11,8 @@ from astropy.convolution import Gaussian2DKernel
 from scipy.signal import convolve as scipy_convolve
 from astropy.convolution import convolve
 
+sys.path.insert(1, 'libs/')
+
 from pic_process import *
 from minkos import *
 
