@@ -48,18 +48,49 @@ def main(myFile):
 
   h,col = get_right(F,U,Chi, args.functional)
   h = h/np.max(h)
-  xf,ff = normalize_on_x(x,h)
+  
+  list_max_min = []
 
-  print(len(xf), len(x))
+  for i,v in enumerate(h):
+      if i > 1:
+        if h[i-2] > h[i-1] and h[i-1] < h[i]:
+            print(x[i-1])
+            list_max_min += [x[i-1]]
+        if h[i-2] < h[i-1] and h[i-1] > h[i]:
+            print(x[i-1])
+            list_max_min += [x[i-1]]
+
+  print(list_max_min)
+  a = os.listdir()
+  if not "temp" in a:
+      os.mkdir("temp")
+  for i in range(len(list_max_min)):
+      print("Threshold", str(list_max_min[i]), "...")
+      plt.clf()
+      michel = supra_boucle(file1, list_max_min[i])
+      plt.title("Threshold - " + str(list_max_min[i]))
+      plt.imshow(michel, cmap="viridis")
+      plt.savefig("temp/"+ str(i)+".png")
+
+        
+
   #beta.plot(x,h/np.max(h))
-  beta.plot(xf,ff, linewidth = 4)
   #beta.plot(xf,ff, linewidth = 4)
-  beta.plot(x,h)
+  #beta.plot(x,h)
 
   
-  plt.show()
+  #plt.show()
       
-    
+def supra_boucle(file1,threshold):
+    file1 = np.copy(file1)
+    for i in range(len(file1)):
+        for j in range(len(file1[i])):
+            pix =  file1[i][j]
+            if pix > threshold:
+                file1[i][j] = 1
+            else:
+                file1[i][j] = 0
+    return file1
   
     
 

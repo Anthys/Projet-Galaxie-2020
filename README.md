@@ -9,6 +9,10 @@
 | main.py | Calcule les fonctionelles d'une image en format DAT ou FITS | Programme |
 | trasismooth.py | Représente les variations des fonctionelles en fonction du lissage des images | Programme |
 | morpho.py | Utilise la méthode conventionelle pour calculer les paramètres d'une galaxie | Programme |
+| transismoothall.py | Variations des fonctionelles en fonction du lissage séparées en quatre fenêtres | Programme |
+| every.py | Compare toutes les fonctionelles de chaque image présente dans un répertoire | Programme |
+| test_binary.py | Enregistre les images binaires correspondantes aux maxima/minima locaux | Test |
+| test_crop.py | Crop une fonctionelle en l'arretant lorsqu'elle converge vers 0 | Test |
 
 | **Attention: Les fichiers de type "Pack de fonctions" sont utilisés par plusieurs programmes, faire attention lors de leurs modifications.** |
 | --- |
@@ -41,7 +45,11 @@
 ## morpho.py
   `python morpho.py [FITS ou DAT file] [optional args]`
 
+## test_binary.py
+  `python test_binary.py [FITS ou DAT file] [optional args]` 
 
+### Exemple de résultat:
 
+<img src="img/binary/anim2.gif" alt="drawing" width="300"/>
 
 [Test1]: img/yesyes.png "SuperLesFonctionelles"
