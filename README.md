@@ -13,6 +13,7 @@
 | every.py | Compare toutes les fonctionelles de chaque image présente dans un répertoire | Programme |
 | test_binary.py | Enregistre les images binaires correspondantes aux maxima/minima locaux | Test |
 | test_crop.py | Crop une fonctionelle en l'arretant lorsqu'elle converge vers 0 | Test |
+| test_binary_interactive.py | Montre les images binarisées en fonction de l'input, s'actualise en temps réel | Test |
 
 | **Attention: Les fichiers de type "Pack de fonctions" sont utilisés par plusieurs programmes, faire attention lors de leurs modifications.** |
 | --- |
