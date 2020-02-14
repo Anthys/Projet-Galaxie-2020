@@ -29,8 +29,7 @@
 ### Exemple de résultat:
   ![alt text][Test1]
 
-##### Tous les résultats:
-  [lien](osef/all_res.md)
+  [Tous les résultats](osef/all_res.md)
 
 
 ## transismooth.py
@@ -40,10 +39,16 @@
 
 ### Exemple de résultat:
 
-<img src="datfiles/spiraleBarreeA_Chi.png" alt="drawing" width="200"/><img src="datfiles/spiraleBarreeA_U.png" alt="drawing" width="200"/><img src="datfiles/spiraleBarreeA_F.png" alt="drawing" width="200"/>
+<img src="datfiles/spiraleBarreeA_Chi.png" alt="drawing" width="300"/><img src="datfiles/spiraleBarreeA_U.png" alt="drawing" width="300"/><img src="datfiles/spiraleBarreeA_F.png" alt="drawing" width="300"/>
 
 ## morpho.py
   `python morpho.py [FITS ou DAT file] [optional args]`
+
+## every.py
+
+### Exemple de résultat:
+
+<img src="img/all_chi.png" alt="drawing" width="300"/><img src="img/all_u.png" alt="drawing" width="300"/><img src="datfiles/img/all_f.png" alt="drawing" width="300"/>
 
 ## test_binary.py
   `python test_binary.py [FITS ou DAT file] [optional args]` 
@@ -53,3 +58,8 @@
 <img src="img/binary/anim2.gif" alt="drawing" width="300"/>
 
 [Test1]: img/yesyes.png "SuperLesFonctionelles"
+
+
+## test_binary_interactive.py
+
+  - Possibilité de cliquer sur la courbe pour affichier l'image binarisée correspondante.
