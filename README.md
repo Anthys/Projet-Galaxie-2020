@@ -49,7 +49,7 @@
 
 ### Exemple de résultat:
 
-<img src="img/all_chi.png" alt="drawing" width="300"/><img src="img/all_u.png" alt="drawing" width="300"/><img src="datfiles/img/all_f.png" alt="drawing" width="300"/>
+<img src="img/all_chi.png" alt="drawing" width="300"/><img src="img/all_u.png" alt="drawing" width="300"/><img src="img/all_f.png" alt="drawing" width="300"/>
 
 ## test_binary.py
   `python test_binary.py [FITS ou DAT file] [optional args]` 
