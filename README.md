@@ -6,11 +6,13 @@
 | :-----: | :-----: | :-----: |
 | pic_process.py | Toutes les fonctions de traitement d'images | Pack de fonctions |
 | minkos.py | Toutes les fonctions relatives aux fonctionelles de M | Pack de fonctions |
+| matrices.py | Fonctions de calculs sur les matrices | Pack de fonctions |
 | main.py | Calcule les fonctionelles d'une image en format DAT ou FITS | Programme |
 | trasismooth.py | Représente les variations des fonctionelles en fonction du lissage des images | Programme |
 | morpho.py | Utilise la méthode conventionelle pour calculer les paramètres d'une galaxie | Programme |
 | transismoothall.py | Variations des fonctionelles en fonction du lissage séparées en quatre fenêtres | Programme |
 | every.py | Compare toutes les fonctionelles de chaque image présente dans un répertoire | Programme |
+| create_matrice.py | Calcule complètement la matrice des fonctionelles et rend les valeurs propres qu'on recherche | Programme |
 | test_binary.py | Enregistre les images binaires correspondantes aux maxima/minima locaux | Test |
 | test_crop.py | Crop une fonctionelle en l'arretant lorsqu'elle converge vers 0 | Test |
 | test_binary_interactive.py | Montre les images binarisées en fonction de l'input, s'actualise en temps réel | Test |
@@ -64,3 +66,10 @@
 ## test_binary_interactive.py
 
   - Possibilité de cliquer sur la courbe pour affichier l'image binarisée correspondante.
+
+## create_matrice.py
+
+  - Il faut donner en argument le dossier où sont les images en format DAT, et le dossier où sont les résultats de la méthode conventionelle.
+  - La première fois, il faut ne pas utiliser l'argument `-n` pour traiter les images et les renommer en enlevant les strings "-", "\xd1", "+", qui posent problème.
+
+  - Ou alors vous pouvez directement utiliser le fichier "out.npy" déjà calculé avec l'argument `-l`, pour `--load`.
