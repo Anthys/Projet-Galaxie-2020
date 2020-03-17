@@ -78,5 +78,5 @@
 
 Exemple de résultat :
 
-<img src="osef/Chat.png" alt="drawing" width="300"/>
+<img src="osef/Chat.png" alt="drawing" width="800"/>
 
