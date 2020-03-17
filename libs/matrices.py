@@ -71,14 +71,16 @@ def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
 def process_matrix(matrix):
   """ Process la matrice d'arès le protocole des notes sur Google Drive, rend les valeurs propres """
 
-  for line in matrix:
-    line = line - np.mean(line)
+  for i in range(matrix.shape[0]):
+    matrix[i] = matrix[i] - np.mean(matrix[i])
 
-  for line in matrix:
-    std = np.std(line)
-    if std != 0:line = line/std
+  for i in range(matrix.shape[0]):
+    std = np.std(matrix[i])
+    if std != 0:
+      matrix[i] = matrix[i]/std
 
   matrix2 = 1/matrix.shape[0]*np.dot(matrix, matrix.T)
+
 
   val_propres = np.linalg.eig(matrix2)
 
