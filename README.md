@@ -76,4 +76,7 @@
 
 ## degrade.py
 
-[Exemple de résultat]: osef/Chat.png "SuperLesFonctionelles"
+Exemple de résultat :
+
+<img src="osef/Chat.png" alt="drawing" width="300"/>
+
