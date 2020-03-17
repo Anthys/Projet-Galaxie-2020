@@ -34,6 +34,7 @@ def fantom(file1):
               file3 += [file1[i][c]]
       if file3 != []:
           file2 += [file3]
+  file2 = np.float64(file2)
   return file2
 
 def smooth_file(file1, valsmooth):
@@ -43,7 +44,7 @@ def smooth_file(file1, valsmooth):
   size_gauss = valsmooth
   img = file1
   img_zerod = img.copy()
-  img_zerod[np.isnan(img)] = 0
+  # img_zerod[np.isnan(img)] = 0
   # It is a 9x9 array
   kernel = Gaussian2DKernel(size_gauss)#x_stddev=1)
   file1 = scipy_convolve(img, kernel, mode='same', method='direct')
