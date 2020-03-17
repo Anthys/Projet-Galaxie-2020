@@ -76,7 +76,7 @@ def get_image(path, dat=False):
   # Récupérer le fichier
   if dat or ext == "dat":
     file1 = get_dat_file(path)
-  elif ext == "fit":
+  elif ext == "fits":
     file1 = get_fit_file(path)
     # Enlever les pixels fantomes
     file1 = fantom(file1)
