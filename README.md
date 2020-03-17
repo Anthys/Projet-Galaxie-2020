@@ -73,3 +73,7 @@
   - La première fois, il faut ne pas utiliser l'argument `-n` pour traiter les images et les renommer en enlevant les strings "-", "\xd1", "+", qui posent problème.
 
   - Ou alors vous pouvez directement utiliser le fichier "out.npy" déjà calculé avec l'argument `-l`, pour `--load`.
+
+## degrade.py
+
+[Exemple de résultat]: osef/Chat.png "SuperLesFonctionelles"
