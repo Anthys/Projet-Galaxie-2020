@@ -43,7 +43,7 @@ def smooth_file(file1, valsmooth):
   size_gauss = valsmooth
   img = file1
   img_zerod = img.copy()
-  img_zerod[np.isnan(img)] = 0
+  #img_zerod[np.isnan(img)] = 0
   # It is a 9x9 array
   kernel = Gaussian2DKernel(size_gauss)#x_stddev=1)
   file1 = scipy_convolve(img, kernel, mode='same', method='direct')
@@ -76,7 +76,7 @@ def get_image(path, dat=False):
   # Récupérer le fichier
   if dat or ext == "dat":
     file1 = get_dat_file(path)
-  elif ext == "fit":
+  elif ext == "fits":
     file1 = get_fit_file(path)
     # Enlever les pixels fantomes
     file1 = fantom(file1)
