@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 from astropy.io import fits
 from scipy.signal import convolve as scipy_convolve
@@ -82,3 +83,16 @@ def get_image(path, dat=False):
     # Enlever les pixels fantomes
     file1 = fantom(file1)
   return file1,name,ext
+
+def degrade(file1, val):
+    """ Dégrade la qualité d'une image en diminuant son nombre de pixels, val est le facteur de division """
+    assert type(val) == int
+    img1 = np.float64(file1)
+    img2 = []
+    for i in range(math.floor(img1.shape[0]/val)):
+        img2 += [[]]
+        for j in range(math.floor(img1.shape[1]/val)):
+            moyenne = (img1[i*val][j*val] + img1[i*val + 1][j*val] + img1[i*val][j*val + 1] + img1[i*val + 1][j*val + 1])/(val**2)
+            img2[i] += [moyenne]
+    img2 = np.float64(img2)
+    return img2
