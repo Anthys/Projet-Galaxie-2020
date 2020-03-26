@@ -31,7 +31,7 @@ def fantom(file1):
   return file2
 
 
-def save_cutout(orig,pos, size, out, lamatrice):
+def save_cutout2(orig,pos, size, out, lamatrice):
     hdu = fits.open(orig)[0]
     wcs = WCS(hdu.header)
 
@@ -47,7 +47,7 @@ def save_cutout(orig,pos, size, out, lamatrice):
     # Write the cutout to a new FITS file
     hdu.writeto(out, overwrite=True)
 
-def save_cutout2(orig,pos, size, out, lamatrice):
+def save_cutout(orig,pos, size, out, lamatrice):
   # hdu = fits.open(orig)[0]
   # wcs = WCS(hdu.header)
 
@@ -113,7 +113,7 @@ for i in a:
             c = input("")
           if c == "o":
             done = True
-            save_cutout2(i, (x1,y1), (x2-x1,y2-y1), "./michel/"+i, new_m)
+            save_cutout(i, (x1,y1), (x2-x1,y2-y1), "./michel/"+i, new_m)
           else:
             plt.close()
             plt.imshow(file1, cmap='viridis')
