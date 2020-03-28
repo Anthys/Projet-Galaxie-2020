@@ -42,9 +42,44 @@ def main():
     a = a.T
     b = process_matrix(a)
     #cercle_correlation(b[1], b[0])
-    sphere_correlation(b[1],b[0])
-  print(b)
+    #sphere_correlation(b[1],b[0])
+    #histograme_valeurs_propres(b[0], 10)
+    val_prop_espace(b[0])
+  #print(b)
 
+def val_prop_espace(valeursPropres):
+  valeursPropres = valeursPropres.real
+  #p = sum(valeursPropres)
+  for i in range(len(valeursPropres)):
+    if np.isclose(0, valeursPropres[i]):
+      valeursPropres[i] = 0
+    assert valeursPropres[i] >= 0
+  p = sum(valeursPropres)
+  valeursPropres = [(valeursPropres[i], valeursPropres[i]/p,i) for i in range(len(valeursPropres))]
+  valeursPropres.sort(reverse=True)
+  ## FORMAT: (Valeurpropre, Pourcentage par rapport à la somme, espace propre associé)
+  return valeursPropres
+
+
+def histograme_valeurs_propres(valeursPropres, n):
+  #print(valeursPropres)
+  assert n < len(valeursPropres)
+  valeursPropres = valeursPropres.real
+  #p = sum(valeursPropres)
+  valeursPropres = [(valeursPropres[i],i) for i in range(len(valeursPropres))]
+  valeursPropres.sort(reverse=False)
+  fig = plt.figure()
+  ax = fig.add_axes([0,0,1,1])
+  valeursPropres = valeursPropres[:n] # Tronquer
+  #print(valeursPropres[0][0], valeursPropres[3][0])
+  x,y = [],[]
+  for j in range(len(valeursPropres)):
+    val = valeursPropres[j]
+    x += [val[1]]
+    y += [val[0]]
+  ax.bar(x,y)
+  plt.show()
+    
 
 def cercle_correlation(matriceEspaces, valeursPropres, n=2):
   assert n == 2
