@@ -1,4 +1,4 @@
-import os, shutil
+import os, shutil, sys
 import matplotlib.pyplot as plt
 from astropy.io import fits
 import numpy as np
@@ -104,14 +104,3 @@ for i in a:
           print(e)
       
     plt.close()
-
-def crop_matrix(m, x1, y1,x2,y2):
-  new_m = []
-  for i in range(len(m)):
-    if i > x1 and i<x2:
-      cur_line = []
-      for j in range(len(m[i])):
-        if j > y1 and j<y2:
-          cur_line += [m[i][j]]
-      new_m += [cur_line]
-  return new_m

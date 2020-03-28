@@ -12,7 +12,7 @@ def init_args():
     parser.add_argument("dat_path", help='', type=str)
     parser.add_argument("conv_path", help='', type=str)
     parser.add_argument("-p", "--process", help='',action="store_true")
-    parser.add_argument("-n", "--no_treat", help='Pas de traitement et renomage des fichiers (si vous l"avez deja fait')',action="store_true")
+    parser.add_argument("-n", "--no_treat", help="Pas de traitement et renomage des fichiers (si vous l'avez deja fait)",action="store_true")
     parser.add_argument("-l", "--load", help='Ne calcule pas la matrice et load le fichier deja fait',action="store_true")
 
     args = parser.parse_args()
@@ -33,9 +33,11 @@ def main():
     np.save("out", a)
 
   if args.process:
+    a = a.T # à enlever au prochain lancement sans load
     b = process_matrix(a)
 
   print(b)
+  print(np.sum(b[0]))
 
 
 if __name__ == "__main__":
