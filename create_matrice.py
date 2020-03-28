@@ -6,6 +6,7 @@ from libs.matrices import *
 
 import matplotlib.pyplot as plt
 import matplotlib
+from copy import copy
 
 from mpl_toolkits.mplot3d import Axes3D
 from itertools import product, combinations
@@ -41,11 +42,47 @@ def main():
   if args.process:
     a = a.T #à enlever dès qu'on créera une nouvelle matrice sans -load
     b = process_matrix(a)
+    #print(b)
     #cercle_correlation(b[1], b[0])
     #sphere_correlation(b[1],b[0])
-  print(b)
-  print(np.sum(b[0]))
+    #histograme_valeurs_propres(b[0], 10)
+    # val_prop_espace(b[0])
+    PCA(a, b[1], b[0])
+    
 
+def val_prop_espace(valeursPropres):
+  valeursPropres = valeursPropres.real
+  #p = sum(valeursPropres)
+  for i in range(len(valeursPropres)):
+    if np.isclose(0, valeursPropres[i]):
+      valeursPropres[i] = 0
+    assert valeursPropres[i] >= 0
+  p = sum(valeursPropres)
+  valeursPropres = [(valeursPropres[i], valeursPropres[i]/p,i) for i in range(len(valeursPropres))]
+  valeursPropres.sort(reverse=True)
+  ## FORMAT: (Valeurpropre, Pourcentage par rapport à la somme, espace propre associé)
+  return valeursPropres
+
+
+def histograme_valeurs_propres(valeursPropres, n):
+  #print(valeursPropres)
+  assert n < len(valeursPropres)
+  valeursPropres = valeursPropres.real
+  #p = sum(valeursPropres)
+  valeursPropres = [(valeursPropres[i],i) for i in range(len(valeursPropres))]
+  valeursPropres.sort(reverse=False)
+  fig = plt.figure()
+  ax = fig.add_axes([0,0,1,1])
+  valeursPropres = valeursPropres[:n] # Tronquer
+  #print(valeursPropres[0][0], valeursPropres[3][0])
+  x,y = [],[]
+  for j in range(len(valeursPropres)):
+    val = valeursPropres[j]
+    x += [val[1]]
+    y += [val[0]]
+  ax.bar(x,y)
+  plt.show()
+    
 
 def cercle_correlation(matriceEspaces, valeursPropres, n=2):
   assert n == 2
@@ -110,26 +147,48 @@ def sphere_correlation(matriceEspaces, valeursPropres, n=3):
   plt.show()
 
 
-def PCA(matriceEspaces, valeursPropres, p=0.9):
+def PCA(a, matriceEspaces, valeursPropres, proportion=0.99999999):
 
   matriceEspaces = matriceEspaces.T
-  valeursPropres = [(valeursPropres[i],i) for i in range(len(valeursPropres))]
-  valeursPropres.sort()
+  valeursSorted = val_prop_espace(valeursPropres)
 
-  n = 0
+  vecteursPropres = []
   prop = 0
-  while prop < p:
-    prop += liste_proportions[n]
-    n += 1
+  i = 0
 
-  valeursPropres = valeursPropres[:n]
-  print(valeursPropres)
+  while prop < proportion:
+    vecteursPropres.append(matriceEspaces[:,valeursSorted[i][2]])
+    prop += valeursSorted[i][1]
+    i += 1
 
-  espaces_propres = []
-  for couple in valeursPropres:
-    espaces_propres.append(matriceEspaces[:,couple[1]])
+  nb_variables = len(vecteursPropres) # seulement les variables qui contiennent p*100 % de l'info
+  nb_galaxies = np.shape(a)[0]
+
+  data_standardized = a.T
+
+  for i in range(nb_galaxies):
+    data_standardized[i] = data_standardized[i] - np.mean(data_standardized[i])
+
+  for i in range(nb_galaxies):
+    std = np.std(data_standardized[i])
+    if std != 0:
+      data_standardized[i] = data_standardized[i]/std
   
-  return espaces_propres
+  data_standardized = data_standardized.T
+
+  result = np.zeros((nb_galaxies, nb_variables))
+  for index_variable in range(nb_variables):
+    for index_galaxie in range(nb_galaxies):
+      X = data_standardized[index_galaxie, :]
+      result[index_galaxie, index_variable] = np.dot(X, vecteursPropres[index_variable])
+
+  variables = np.arange(nb_variables)
+  for index_galaxie in range(nb_galaxies):
+    plt.plot(variables, result[index_galaxie, :], 'o')
+  plt.show()
+
+  return result
+
 
 if __name__ == "__main__":
     init_args()

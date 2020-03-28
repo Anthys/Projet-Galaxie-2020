@@ -5,7 +5,7 @@ from minkfncts2d import MF2D
 import argparse
 import os,sys
 
-sys.path.insert(1, 'libs/')
+#sys.path.insert(1, 'libs/')
 
 from astropy.io import fits
 from astropy.utils.data import get_pkg_data_filename
@@ -13,8 +13,8 @@ from astropy.convolution import Gaussian2DKernel
 from scipy.signal import convolve as scipy_convolve
 from astropy.convolution import convolve
 
-from pic_process import *
-from minkos import *
+from libs.pic_process import *
+from libs.minkos import *
 
 def main(myFile):
     global args

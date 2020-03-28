@@ -2,6 +2,7 @@ import numpy as np
 import os,sys
 from libs.minkos import *
 from libs.pic_process import *
+import matplotlib.pyplot as plt
 
 def traiter_dat(path):
   for i in os.listdir(path):
@@ -64,12 +65,15 @@ def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
   ligne_S, ligne_C, ligne_A = np.array(ligne_S), np.array(ligne_C), np.array(ligne_A)
 
   final = np.vstack((matrice_fonctionelles,ligne_C,ligne_A,ligne_S))
+  final = final.T
 
   return final
 
 
 def process_matrix(matrix):
   """ Process la matrice d'arès le protocole des notes sur Google Drive, rend les valeurs propres """
+  
+  print(np.shape(matrix))
 
   for i in range(matrix.shape[0]):
     matrix[i] = matrix[i] - np.mean(matrix[i])
@@ -79,9 +83,10 @@ def process_matrix(matrix):
     if std != 0:
       matrix[i] = matrix[i]/std
 
-  matrix2 = 1/matrix.shape[0]*np.dot(matrix, matrix.T)
-
+  matrix2 = 1/matrix.shape[0]*np.dot(matrix.T, matrix)
+  # plt.imshow(matrix2)
+  # plt.show()
 
   val_propres = np.linalg.eig(matrix2)
-
   return val_propres
+
