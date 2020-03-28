@@ -67,6 +67,16 @@ def main(myFile):
     axfreq = plt.axes([0.563, 0.04, 0.324, 0.03], facecolor="white")
     sthresh = Slider(axfreq, 'Freq', 0, x[-1], valinit=10, valstep=3)
 
+    #beta.plot(x,h/np.max(h))
+    #beta.plot(xf,ff, linewidth = 4)
+    if False:
+        for i in ["f", "u","chi"]:
+            h,col = get_right(F,U,Chi, i)
+            h = h/np.max(h)
+            delta.plot(x,h)
+        delta.set_title(args.functional)
+        delta.legend(["F","U","Chi"])
+    #delta.set_xlabel("Threshold")
     # beta.plot(x,h/np.max(h))
     # beta.plot(xf,ff, linewidth = 4)
     delta.plot(x, h)
@@ -128,8 +138,8 @@ def init_args():
     parser = argparse.ArgumentParser(description='TakeMeOn')
     parser.add_argument("file", help='file', type=str)
     parser.add_argument("-s", "--save", help="save at the specified path (no showing)", type=str)
-    parser.add_argument("-cL", "--contrastLinear", help="multiply contrast by x", type=int, default=40)
-    parser.add_argument("-m", dest="max", help="maximum of the linear space", type=int, default=40)
+    parser.add_argument("-cL", "--contrastLinear", help="multiply contrast by x", type = float, default=40)
+    parser.add_argument("-m", dest="max", help="maximum of the linear space", type = int, default=40)
     parser.add_argument("-dat", "--dat", action="store_true", help="file is in dat format")
     parser.add_argument("-smooth", "--smooth", type=int, help="smooth", default=0)
     parser.add_argument("-n", "--name", type=str, help="name of file")
