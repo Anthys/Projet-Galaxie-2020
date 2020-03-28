@@ -13,7 +13,7 @@ a = os.listdir()
 
 plt.ion()
 if not "michel" in a:
-    os.mkdir("michel")
+    os.mkdir("montagne/michel")
 
 def fantom(file1):
   """
@@ -31,12 +31,12 @@ def fantom(file1):
   return file2
 
 
-def save_cutout(orig,pos, size, out):
+def save_cutout2(orig,pos, size, out, lamatrice):
     hdu = fits.open(orig)[0]
     wcs = WCS(hdu.header)
 
     # Make the cutout, including the WCS
-    cutout = Cutout2D(hdu.data, position=pos, size=size, wcs=wcs)
+    cutout = Cutout2D(lamatrice, position=pos, size=size, wcs=wcs)
 
     # Put the cutout image in the FITS HDU
     hdu.data = cutout.data
@@ -46,6 +46,25 @@ def save_cutout(orig,pos, size, out):
 
     # Write the cutout to a new FITS file
     hdu.writeto(out, overwrite=True)
+
+def save_cutout(orig,pos, size, out, lamatrice):
+  # hdu = fits.open(orig)[0]
+  # wcs = WCS(hdu.header)
+
+  # Make the cutout, including the WCS
+  # cutout = Cutout2D(lamatrice, position=pos, size=size, wcs=wcs)
+
+  # Put the cutout image in the FITS HDU
+  # hdu.data = cutout.data
+
+  # Update the FITS header with the cutout WCS
+  # hdu.header.update(cutout.wcs.to_header())
+
+  # Write the cutout to a new FITS file
+  # hdu.writeto(out, overwrite=True)
+  hdu = fits.PrimaryHDU(lamatrice)
+  hdu.writeto(out, overwrite=True)
+
 
 
 def crop_matrix(m, x1, y1,x2,y2):
@@ -94,7 +113,7 @@ for i in a:
             c = input("")
           if c == "o":
             done = True
-            save_cutout(i, (x1,y1), (x2-x1,y2-y1), "./michel/"+i)
+            save_cutout(i, (x1,y1), (x2-x1,y2-y1), "./michel/"+i, new_m)
           else:
             plt.close()
             plt.imshow(file1, cmap='viridis')
