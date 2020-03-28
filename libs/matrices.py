@@ -249,4 +249,8 @@ def PCA(a, matriceEspaces, valeursPropres, proportion=0.999):
     plt.plot(variables, result[index_galaxie, :], 'o')
   plt.show()
 
-  return result
+  ecarts_type = np.zeros(nb_variables)
+  for index_variable in range(nb_variables):
+    ecarts_type[index_variable] = np.std(result[:,index_variable])
+
+  return result, ecarts_type

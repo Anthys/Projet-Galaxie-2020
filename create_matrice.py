@@ -48,7 +48,7 @@ def main():
     #histograme_valeurs_propres(b[0], 10)
     #val_prop_espace(b[0])
     global_curve(a)
-    PCA(a, b[1], b[0])
+    print(PCA(a, b[1], b[0]))
     #print(b)
 
 
