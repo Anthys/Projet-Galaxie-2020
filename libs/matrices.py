@@ -75,16 +75,20 @@ def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
 def process_matrix(matrix):
   """ Implémentation de la méthode tirée de 'Probabilités, statistiques et analyses multicritères', de Mathieu Rouaud  """
 
+  matrix = matrix.T
   for i in range(matrix.shape[0]):
     matrix[i] = matrix[i] - np.mean(matrix[i])
-
+  
   for i in range(matrix.shape[0]):
     std = np.std(matrix[i])
     if std != 0:
       matrix[i] = matrix[i]/std
+    else:
+      print("std = 0")
 
-  matrix2 = 1/matrix.shape[0]*np.dot(matrix.T, matrix)
+  matrix2 = 1/matrix.shape[1]*np.dot(matrix, matrix.T)
 
+  matrix2 = matrix2.T
   #print(matrix2.shape)
   val_et_espaces = np.linalg.eig(matrix2)
 
