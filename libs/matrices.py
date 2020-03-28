@@ -5,6 +5,7 @@ from libs.pic_process import *
 import matplotlib.pyplot as plt
 
 def traiter_dat(path):
+  """ Remplace les caractères chiants des images """
   for i in os.listdir(path):
     if i[-3:] in ["txt","dat"]:
       n_name = i.replace("-", "_").replace("\x1d", "").replace("+", "_")
@@ -70,7 +71,7 @@ def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
 
 
 def process_matrix(matrix):
-  """ Process la matrice d'arès le protocole des notes sur Google Drive, rend les valeurs propres """
+  """ Implémentation de la méthode tirée de 'Probabilités, statistiques et analyses multicritères', de Mathieu Rouaud  """
 
   for i in range(matrix.shape[0]):
     matrix[i] = matrix[i] - np.mean(matrix[i])
@@ -82,12 +83,13 @@ def process_matrix(matrix):
 
   matrix2 = 1/matrix.shape[0]*np.dot(matrix.T, matrix)
 
-  print(matrix2.shape)
+  #print(matrix2.shape)
   val_propres = np.linalg.eig(matrix2)
 
   return val_propres
 
 def global_curve(data):
+  """ Représente la courbe de la moyenne des fonctions avec leurs écarts types """
   data = data.T
   final = []
   for parameter in data:
@@ -104,6 +106,7 @@ def global_curve(data):
   plt.show()
 
 def val_prop_espace(valeursPropres):
+  """ Rends les valeurs propres triées de la plus informative à la moins informative, sous la forme (val, pourcentage, indice de l'espace propre) """
   valeursPropres = valeursPropres.real
   #p = sum(valeursPropres)
   for i in range(len(valeursPropres)):
@@ -118,6 +121,7 @@ def val_prop_espace(valeursPropres):
 
 
 def histograme_valeurs_propres(valeursPropres, n):
+  """ Histograme des n premières valeurs propres """ 
   #print(valeursPropres)
   assert n < len(valeursPropres)
   valeursPropres = valeursPropres.real
@@ -137,6 +141,7 @@ def histograme_valeurs_propres(valeursPropres, n):
   plt.show()
 
 def cercle_correlation(matriceEspaces, valeursPropres, n=2):
+  """ Cercle de corrélation sur les deux valeurs propres les plus informatives """
   assert n == 2
   matriceEspaces = matriceEspaces.T
   valeursPropres = [(valeursPropres[i],i) for i in range(len(valeursPropres))]
@@ -161,7 +166,7 @@ def cercle_correlation(matriceEspaces, valeursPropres, n=2):
   plt.show()
 
 def sphere_correlation(matriceEspaces, valeursPropres, n=3):
-
+  """ Sphère de corrélation sur les trois valeurs propres les plus informatives """
 
   fig = plt.figure()
   ax = fig.gca(projection='3d')
