@@ -14,6 +14,7 @@ def traiter_dat(path):
 
 
 def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
+  """ Rends une matrice de données avec les galaxies en lignes et les paramètres en colonnes """ 
 
   resolution = 100
 
@@ -66,6 +67,7 @@ def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
   ligne_S, ligne_C, ligne_A = np.array(ligne_S), np.array(ligne_C), np.array(ligne_A)
 
   final = np.vstack((matrice_fonctionelles,ligne_C,ligne_A,ligne_S))
+  final = final.T
 
   return final
 
@@ -84,9 +86,9 @@ def process_matrix(matrix):
   matrix2 = 1/matrix.shape[0]*np.dot(matrix.T, matrix)
 
   #print(matrix2.shape)
-  val_propres = np.linalg.eig(matrix2)
+  val_et_espaces = np.linalg.eig(matrix2)
 
-  return val_propres
+  return val_et_espaces
 
 def global_curve(data):
   """ Représente la courbe de la moyenne des fonctions avec leurs écarts types """
@@ -114,10 +116,10 @@ def val_prop_espace(valeursPropres):
       valeursPropres[i] = 0
     assert valeursPropres[i] >= 0
   p = sum(valeursPropres)
-  valeursPropres = [(valeursPropres[i], valeursPropres[i]/p,i) for i in range(len(valeursPropres))]
-  valeursPropres.sort(reverse=True)
+  supertuple = [(valeursPropres[i], valeursPropres[i]/p,i) for i in range(len(valeursPropres))]
+  supertuple.sort(reverse=True)
   ## FORMAT: (Valeurpropre, Pourcentage par rapport à la somme, espace propre associé)
-  return valeursPropres
+  return supertuple
 
 
 def histograme_valeurs_propres(valeursPropres, n):
