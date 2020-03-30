@@ -72,10 +72,10 @@ def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
   return final
 
 
-def process_matrix(matrix):
+def process_matrix(matrix_orig):
   """ Implémentation de la méthode tirée de 'Probabilités, statistiques et analyses multicritères', de Mathieu Rouaud  """
 
-  matrix = matrix.T
+  matrix = np.copy(matrix_orig.T)
   for i in range(matrix.shape[0]):
     matrix[i] = matrix[i] - np.mean(matrix[i])
   
@@ -103,7 +103,7 @@ def global_curve(data):
   
   fig = plt.figure()
   x = [i for i in range(len(final))]
-  print(final[0])
+  print(final[0][0])
   means = [i[0] for i in final]
   stds = [i[1] for i in final]
   ax = plt.gca()
