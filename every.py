@@ -26,7 +26,7 @@ def get_right(F,U,chi,arg):
 
 def main(myPath):
   pics = os.listdir(myPath)
-  pics = [i for i in pics if i[-4:] == ".dat"]
+  pics = [i for i in pics if i[-5:] == ".fits"]
   print(pics)
 
 
