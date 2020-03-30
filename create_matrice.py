@@ -40,11 +40,22 @@ def main():
 
   if args.process:
     a = a.T
+    example_matrix = np.array([
+      [1,1,1],
+      [1,1,5],
+      [2,2,3],
+      [3,3,1],
+      [3,3,5]
+      ], dtype=float)
+    #a = example_matrix
+    print(a.shape)
+    print(a.T[0])
     b = process_matrix(a)
     #cercle_correlation(b[1], b[0])
     #sphere_correlation(b[1],b[0])
     #histograme_valeurs_propres(b[0], 10)
     #val_prop_espace(b[0])
+    #print(b)
     global_curve(a)
   #print(b)
 
