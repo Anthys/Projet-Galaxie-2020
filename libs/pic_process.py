@@ -61,6 +61,27 @@ def get_fit_file(name):
   file1 = np.float64(file1)
   return file1
 
+def charger_le_putain_de_fichier(path):
+  matrix = []
+  file_r = open(path, "r")
+  for line in file_r:
+    temp = line.split()
+    if temp[0] != "#":
+        x = int(temp[2])-1
+        y = int(temp[3])-1  
+        v = float(temp[4])
+        if y >= len(matrix):
+          matrix.append([])
+        if x >= len(matrix[y]):
+          matrix[y].append([])
+        if v == 0:
+          pass
+          #print("coucou")
+        matrix[y][x] = v
+  matrix = np.float64(matrix)
+  name = path.split("/")[1].split(".")[0]
+  return matrix, name
+
 def get_image(path, dat=False):
   """
     Obtenir une image en format np-array-64, son nom et son extension
