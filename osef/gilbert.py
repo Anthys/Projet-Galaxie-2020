@@ -1,4 +1,5 @@
 import os, shutil, sys
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from astropy.io import fits
 import numpy as np
@@ -83,7 +84,7 @@ for i in a:
     file1 = fits.getdata(i)
     file1 = np.float64(file1)
     file1 = fantom(file1)
-    plt.imshow(file1, cmap='viridis')
+    plt.imshow(file1, cmap='rainbow')
     plt.show()
     b = ""
     while b not in ["o", "n", "c"]:
