@@ -13,7 +13,7 @@ a = os.listdir()
 
 plt.ion()
 if not "michel" in a:
-    os.mkdir("montagne/michel")
+    os.mkdir("michel")
 
 def fantom(file1):
   """
