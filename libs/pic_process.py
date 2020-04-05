@@ -117,3 +117,40 @@ def degrade(file1, val):
             img2[i] += [moyenne]
     img2 = np.float64(img2)
     return img2
+
+
+def add_poisson_noise(img):
+  noise_mask = np.random.poisson(img)
+  noisy_img = img + noise_mask
+  return noisy_img
+
+def rotation_X(img,theta):
+  img2=[[[] for i in range(len(img[0]))] for j in range(len(img))]
+  for y,line in enumerate(img):
+    for x, val in enumerate(line):
+      #print(y,x)
+      xx = x
+      yy = (y-len(img)//2)*math.cos(theta)+len(img)//2
+      #print(yy)
+      target = img2[int(yy)][int(xx)]
+      img2[int(yy)][int(xx)].append(val)
+  #print(img2[1][1])
+  for y,line in enumerate(img2):
+    for x, val in enumerate(line):
+      #print(y,x)
+      if img2[y][x]==[]:
+        img2[y][x] = 0
+      else:
+        img2[y][x] = np.mean(img2[y][x])
+
+  img2 = np.float64(img2)
+
+  return img2
+
+  
+def quadrimean(img,x,y):
+  summ = 0
+  for x,y in [ [int(x),int(y)], [int(x)+1,int(y)],[int(x)+1,int(y)+1],[int(x),int(y)+1] ]:
+    if y < len(img) and x < len(img[y]):
+      summ += img[y][x]
+  return summ/4
