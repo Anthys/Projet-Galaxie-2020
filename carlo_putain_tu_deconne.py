@@ -57,9 +57,9 @@ def main(myFile):
     x = np.linspace(0.0, max_lin, 100)
     a,b,c = 1,1,1
     if args.normalize:
-        a = np.max(np.abs(F))
-        b = np.max(np.abs(U))
-        c = np.max(np.abs(Chi))
+        a = coef_normalization_functional(F)
+        b = coef_normalization_functional(U)
+        c = coef_normalization_functional(Chi)
     plt.plot(x, np.array(F)/a, color = func_col("f"))
     plt.plot(x, np.array(U)/b, color = func_col("u"))
     plt.plot(x, np.array(Chi)/c, color = func_col("chi"))
