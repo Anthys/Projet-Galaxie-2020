@@ -18,7 +18,7 @@ if not "michel" in a:
 
 def fantom(file1):
   """
-    Enlève les pixels fantomes créés par le crop de ds9
+    Enleve les pixels fantomes créés par le crop de ds9
   """
   file2 = []
   for i in range(len(file1)):
@@ -79,13 +79,18 @@ def crop_matrix(m, x1, y1,x2,y2):
       new_m += [cur_line]
   return new_m
 
+def plot_image(img):
+  plt.close()
+  plt.imshow(img, cmap='viridis')
+  plt.xlabel("axe des Y")
+  plt.ylabel("axe des X")
+  plt.show()
 for i in a:
   if i[-3:] == "its":
     file1 = fits.getdata(i)
     file1 = np.float64(file1)
     file1 = fantom(file1)
-    plt.imshow(file1, cmap='rainbow')
-    plt.show()
+    plot_image(file1)
     b = ""
     while b not in ["o", "n", "c"]:
       b = input("")
@@ -106,9 +111,7 @@ for i in a:
           y2 = int(temp[1])
           new_m = crop_matrix(file1, x1,y1,x2,y2)
           new_m = np.float64(new_m)
-          plt.close()
-          plt.imshow(new_m, cmap='viridis')
-          plt.show()
+          plot_image(new_m)
           c = ""
           while c not in ["o", "n"]:
             c = input("")
@@ -116,14 +119,13 @@ for i in a:
             done = True
             save_cutout(i, (x1,y1), (x2-x1,y2-y1), "./michel/"+i, new_m)
           else:
-            plt.close()
-            plt.imshow(file1, cmap='viridis')
-            plt.show()
+            plot_image(file1)
 
         except Exception as e:
           print(e)
       
     plt.close()
+
 
 def crop_matrix(m, x1, y1,x2,y2):
   new_m = []
