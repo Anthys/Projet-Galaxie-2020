@@ -36,7 +36,8 @@ def get_right(F,U,chi,arg):
 def main(myFile):
     global args
 
-    file1, name, ext = get_image(myFile, args.dat)
+    #file1, name, ext = get_image(myFile, args.dat)
+    file1,name = charger_le_putain_de_fichier(myFile)
 
     # Réhausser le contraste linéairement
     if args.contrastLinear:
@@ -108,7 +109,7 @@ def init_args():
     parser = argparse.ArgumentParser(description='TakeMeOn')
     parser.add_argument("file", help='file in fits format', type=str)
     parser.add_argument("-s", "--save", help="save at the specified path (no showing)", type=str)
-    parser.add_argument("-cL", "--contrastLinear", help="multiply contrast by x", type = int, default=40)
+    parser.add_argument("-cL", "--contrastLinear", help="multiply contrast by x", type = float, default=40)
     parser.add_argument("-m", dest="max", help="maximum of the linear space", type = int, default=40)
     parser.add_argument("-dat", "--dat", action="store_true", help="file is in dat format")
     parser.add_argument("-smooth", "--smooth", type = int, help="smooth", default = 1)

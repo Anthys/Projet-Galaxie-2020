@@ -37,7 +37,8 @@ def main(myFile):
 
     x = np.linspace(0.0, max_lin, 100)
 
-    file1, name, ext = get_image(myFile)
+    #file1, name, ext = get_image(myFile)
+    file1, name = charger_le_putain_de_fichier(myFile)
     print("Processing", name, "...")
 
     if args.smooth:
@@ -116,7 +117,7 @@ def main(myFile):
 def show_threshold(ax, img, threshold):
     ax.cla()
     michel = supra_boucle(img, threshold)
-    ax.set_title("Threshold - " + str(threshold))
+    ax.set_title("Threshold - " + str(round(threshold)))
     ax.imshow(michel, cmap="viridis")
 
 
