@@ -4,6 +4,7 @@ import math
 from astropy.io import fits
 from scipy.signal import convolve as scipy_convolve
 from astropy.convolution import Gaussian2DKernel
+from random import *
 
 
 
@@ -118,6 +119,18 @@ def degrade(file1, val):
     img2 = np.float64(img2)
     return img2
 
+def pepper_and_salt(file2, pourcentage):
+    file1 = file2.copy()
+    for i in range(len(file1)):
+        for j in range(len(file1[i])):
+            lepourcentagealeatoire = random()
+            if lepourcentagealeatoire <= pourcentage:
+                lenombrealeatoire = randint(0, 2)
+                if lenombrealeatoire == 0:
+                    file1[i][j] = 0
+                elif lenombrealeatoire == 1:
+                    file1[i][j] = 255
+    return file1
 
 def add_poisson_noise(img):
   noise_mask = np.random.poisson(img)
