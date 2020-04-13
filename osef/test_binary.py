@@ -48,7 +48,7 @@ def main(myFile):
   F, U, Chi = calcul_fonctionelles(file1, max_lin)
 
   h,col = get_right(F,U,Chi, args.functional)
-  h = h/np.max(h)
+  h = h/coef_normalization_functional(h)
   
   list_max_min = []
 

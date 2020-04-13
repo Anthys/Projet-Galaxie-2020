@@ -48,18 +48,39 @@ def main():
       [3,3,1],
       [3,3,5]
       ], dtype=float)
-    #a = example_matrix
-    print(a.shape)
-    print(a.T[0])
+    example_matrix2 = np.array([
+    [55,25,14,16],
+    [25,36,18,20],
+    [90,25,30,15],
+    [18,35,28,20],
+    [18,42,34,20],
+    [70,21,36,28],
+    [25,32,41,20],
+    [35,25,49,20],
+    [150,28,50,13],
+    [130,19,54,15],
+    [35,26,106,20]
+    ], dtype=float)
+    a = example_matrix2
     b = process_matrix(a)
+    valp,espp = b[0],b[1]
+    print(valp)
+    print(espp.shape)
+    print(espp)
+    print("---")
+    red = reduction(a)
+    print(red)
+    print(np.dot(red,espp))
+    print("--")
     #print(b)
-    #cercle_correlation(b[1], b[0])
+    #rep_on_principal(b[1], b[0],a)
+    #cercle_correlation(b[1], b[0],a)
     #sphere_correlation(b[1],b[0])
-    #histograme_valeurs_propres(b[0], 10)
+    histograme_valeurs_propres(b[0], 3)
     #val_prop_espace(b[0])
     #print(b)
-    global_curve(a)
-    print(PCA(a, b[1], b[0]))
+    #global_curve(a)
+    #print(PCA(a, b[1], b[0]))
     #print(b)
 
 

@@ -50,7 +50,7 @@ def main(myFile):
     F, U, Chi = calcul_fonctionelles(file1, max_lin)
 
     h, col = get_right(F, U, Chi, args.functional)
-    h = h / np.max(h)
+    h = h / coef_normalization_functional(h)
 
     list_max_min = []
 
@@ -73,7 +73,7 @@ def main(myFile):
     if False:
         for i in ["f", "u","chi"]:
             h,col = get_right(F,U,Chi, i)
-            h = h/np.max(h)
+            h = h/coef_normalization_functional(h)
             delta.plot(x,h)
         delta.set_title(args.functional)
         delta.legend(["F","U","Chi"])

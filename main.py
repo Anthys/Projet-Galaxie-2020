@@ -17,16 +17,17 @@ from libs.pic_process import *
 from libs.minkos import *
 
 def main(myFile):
+
     global args
 
     file1, name, ext = get_image(myFile)
     
 
-    # Réhausser le contraste
+    # Réhausser le contraste # ?? (comment multiplier par k peut augmenter le contraste ?)
     if args.contrastLinear:
         file1 = contrastLinear(file1, args.contrastLinear)
         
-    # Determiner l'interval de definition de la fonction
+    # Tronquer la fonction à args.max  
     max_lin = 40
     if type(args.max) == int:
         max_lin = args.max
@@ -35,7 +36,7 @@ def main(myFile):
     if args.smooth:
         file1 = smooth_file(file1, args.smooth)
 
-    # Calcul des fonctionelles
+    # Calcul des fonctionnelles
     F, U, Chi = calcul_fonctionelles(file1, max_lin)
     
 
@@ -53,9 +54,9 @@ def main(myFile):
     x = np.linspace(0.0, max_lin, 100)
     a,b,c = 1,1,1
     if args.normalize:
-        a = np.max(F)
-        b = np.max(U)
-        c = np.max(Chi)
+        a = coef_normalization_functional(F)
+        b = coef_normalization_functional(U)
+        c = coef_normalization_functional(Chi)
     plt.plot(x, np.array(F)/a, color = func_col("f"))
     plt.plot(x, np.array(U)/b, color = func_col("u"))
     plt.plot(x, np.array(Chi)/c, color = func_col("chi"))

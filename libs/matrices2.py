@@ -14,11 +14,11 @@ def traiter_dat(path):
 
 
 def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
-  """ Rends une matrice de données avec les galaxies en lignes et les paramètres en colonnes """ 
+  """ Rend une matrice de données avec les galaxies en lignes et les paramètres en colonnes """ 
 
-  resolution = 100
+  # resolution = 100
 
-  #matrice_fonctionelles = np.empty([resolution*2])
+  # matrice_fonctionelles = np.empty([resolution*2])
   initial = True
   ligne_C = []
   ligne_A = []
@@ -71,19 +71,77 @@ def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
 
   return final
 
-def reduction(m):
-  matrix = np.copy(m.T)
-  for i in range(matrix.shape[0]):
-    matrix[i] = matrix[i] - np.mean(matrix[i])
-  
-  #return matrix.T
-  for i in range(matrix.shape[0]):
-    std = np.std(matrix[i])
-    if std != 0:
-      matrix[i] = matrix[i]/std
-    else:
-      print("std = 0")
-  return matrix.T
+
+def calculer_matrice_base_sans_ACS(dat_path, max_iter=100):
+  """ Rend une matrice de données avec les galaxies en lignes et les paramètres en colonnes """ 
+
+  resolution = 100
+
+  #matrice_fonctionelles = np.empty([resolution*2])
+  initial = True
+
+  dat_list = os.listdir(dat_path)
+
+  for i,v in enumerate(dat_list):
+    ext = v[-4:]
+    print(ext)
+    if i > max_iter:
+      break
+    if ext=="fits":
+      print("Fichier trouvé, en cours de process")
+      dat_file = dat_path + "/" + v
+
+      data_fonctionelles = get_image(dat_file)
+      data_fonctionelles = contrastLinear(data_fonctionelles[0], 70)
+      F,U,Chi = calcul_fonctionelles(data_fonctionelles, 256)
+      F,U,Chi = np.array(F), np.array(U), np.array(Chi)
+      N = np.hstack((F,U,Chi))
+      N = N.T
+      #print(N.shape)
+      #print(matrice_fonctionelles.shape )
+
+      if initial:
+        matrice_fonctionelles = N
+        initial = False
+      else:
+        matrice_fonctionelles = np.vstack((matrice_fonctionelles, N))
+
+  return matrice_fonctionelles
+
+def calculer_matrice_base_sans_ACarloS(dat_path, max_iter=100):
+  """ Rend une matrice de données avec les galaxies en lignes et les paramètres en colonnes """ 
+
+  #resolution = 100
+  #matrice_fonctionelles = np.empty([resolution*2])
+  initial = True
+
+  dat_list = os.listdir(dat_path)
+
+  for i,v in enumerate(dat_list):
+    ext = v[-4:]
+    print(ext)
+    if i > max_iter:
+      break
+    if ext==".dat":
+      print("Fichier trouvé, en cours de process")
+      dat_file = dat_path + "/" + v
+
+      data_fonctionelles = charger_le_putain_de_fichier(dat_file)
+      data_fonctionelles = contrastLinear(data_fonctionelles[0], 70)
+      F,U,Chi = calcul_fonctionelles(data_fonctionelles, 256)
+      F,U,Chi = np.array(F), np.array(U), np.array(Chi)
+      N = np.hstack((F,U,Chi))
+      N = N.T
+      #print(N.shape)
+      #print(matrice_fonctionelles.shape )
+
+      if initial:
+        matrice_fonctionelles = N
+        initial = False
+      else:
+        matrice_fonctionelles = np.vstack((matrice_fonctionelles, N))
+
+  return matrice_fonctionelles
 
 def process_matrix(matrix_orig):
   """ Implémentation de la méthode tirée de 'Probabilités, statistiques et analyses multicritères', de Mathieu Rouaud  """
@@ -99,14 +157,13 @@ def process_matrix(matrix_orig):
     else:
       print("std = 0")
 
-  print(matrix.T)
-
   matrix2 = 1/matrix.shape[1]*np.dot(matrix, matrix.T)
+  print(np.max(matrix2), np.min(matrix2))
 
   matrix2 = matrix2.T
-  print(matrix2)
   #print(matrix2.shape)
   val_et_espaces = np.linalg.eig(matrix2)
+  print(matrix2.shape)
 
   return val_et_espaces
 
@@ -145,64 +202,31 @@ def val_prop_espace(valeursPropres):
 def histograme_valeurs_propres(valeursPropres, n):
   """ Histograme des n premières valeurs propres """ 
   #print(valeursPropres)
-  assert n <= len(valeursPropres)
+  assert n < len(valeursPropres)
   valeursPropres = valeursPropres.real
   #p = sum(valeursPropres)
   valeursPropres = [(valeursPropres[i],i) for i in range(len(valeursPropres))]
-  valeursPropres.sort(reverse=True)
-  print(valeursPropres)
+  valeursPropres.sort(reverse=False)
   fig = plt.figure()
-  ax = fig.add_axes([0.1,0.1,0.8,0.8])
+  ax = fig.add_axes([0,0,1,1])
   valeursPropres = valeursPropres[:n] # Tronquer
   #print(valeursPropres[0][0], valeursPropres[3][0])
   x,y = [],[]
   for j in range(len(valeursPropres)):
     val = valeursPropres[j]
-    x += [j]
+    x += [val[1]]
     y += [val[0]]
   ax.bar(x,y)
   plt.show()
 
-def rep_on_principal(matriceEspaces, valeursPropres, individus, n=2):
-  assert n == 2
-  matriceEspaces = matriceEspaces.T
-  valeursPropres = [(valeursPropres[i],i) for i in range(len(valeursPropres))]
-  valeursPropres.sort(reverse=True)
-  valeursPropres = valeursPropres[:n]
-  print(valeursPropres[0], valeursPropres[1])
-
-  red = reduction(individus)
-  prim = (matriceEspaces[valeursPropres[0][1]])
-  secund = (matriceEspaces[valeursPropres[1][1]])
-
-
-  size_window = [5,5]
-  fig = plt.figure(figsize = (*size_window,))
-  #fig.add_subplot(111)
-  for indiv in red:
-    x1 = indiv[valeursPropres[0][1]]
-    y1 = indiv[valeursPropres[1][1]]
-    plt.scatter(x1,y1)
-  #circ1 = plt.Circle((0,0), 1, fill= False, color='r')
-  #ax = plt.gcf().gca()
-  #val = 1.1
-  #ax.set_xlim([-val,val])
-  #ax.set_ylim([-val,val])
-  #plt.gcf().gca().add_artist(circ1)
-  plt.show()
-
-def cercle_correlation(matriceEspaces, valeursPropres, individus, n=2):
+def cercle_correlation(matriceEspaces, valeursPropres, n=2):
   """ Cercle de corrélation sur les deux valeurs propres les plus informatives """
   assert n == 2
   matriceEspaces = matriceEspaces.T
   valeursPropres = [(valeursPropres[i],i) for i in range(len(valeursPropres))]
-  valeursPropres.sort(reverse=True)
+  valeursPropres.sort()
   valeursPropres = valeursPropres[:n]
   print(valeursPropres[0], valeursPropres[1])
-
-  red = reduction(individus)
-  prim = (matriceEspaces[valeursPropres[0][1]])
-  secund = (matriceEspaces[valeursPropres[1][1]])
 
 
   size_window = [5,5]

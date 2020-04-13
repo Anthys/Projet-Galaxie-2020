@@ -1,4 +1,5 @@
 import os, shutil, sys
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from astropy.io import fits
 import numpy as np

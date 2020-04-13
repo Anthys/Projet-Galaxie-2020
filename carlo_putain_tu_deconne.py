@@ -45,6 +45,34 @@ def main(myFile):
 
     fig = plt.figure(figsize = (*size_window,))
     
+    
+    fig.add_subplot(121)
+    plt.title("Galaxy - "+name)
+    print(file1)
+    plt.imshow(file1, cmap="viridis")
+
+    fig.add_subplot(122)
+    x = np.linspace(0.0, max_lin, 100)
+    a,b,c = 1,1,1
+    if args.normalize:
+        a = coef_normalization_functional(F)
+        b = coef_normalization_functional(U)
+        c = coef_normalization_functional(Chi)
+    plt.plot(x, np.array(F)/a, color = func_col("f"))
+    plt.plot(x, np.array(U)/b, color = func_col("u"))
+    plt.plot(x, np.array(Chi)/c, color = func_col("chi"))
+    plt.title("2D Minkowski Functions")
+    plt.legend(["F (Area)", "U (Boundary)", "$\chi$ (Euler characteristic)"], bbox_to_anchor =(1,-0.2), loc = "upper right")
+    plt.xlabel("Threshold")
+    plt.tight_layout()
+
+    # Fin
+    if args.save:
+        print(name)
+        plt.savefig(args.save + "/" +name +".png")
+    else:
+        plt.show()
+
     for i,par in enumerate([0]):
         pars = [221,222, 223, 224]
         part = pars[i]
@@ -140,16 +168,6 @@ def main(myFile):
             plt.plot(x, np.array(U)/b, color = func_col("u"))
             plt.plot(x, np.array(Chi)/c, color = func_col("chi"))
             plt.title("2D Minkowski Functions" + " smooth lvl:" + str(i-1))
-    plt.legend(["F (Area)", "U (Boundary)", "$\chi$ (Euler characteristic)"], bbox_to_anchor =(1,-0.2), loc = "upper right")
-    plt.xlabel("Threshold")
-    plt.tight_layout()
-
-    # Fin
-    if args.save:
-        print(name)
-        plt.savefig(args.save + "/" +name +".png")
-    else:
-        plt.show()
 
 
 

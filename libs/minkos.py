@@ -1,18 +1,18 @@
 import numpy as np
 from minkfncts2d import MF2D
 
-def calcul_fonctionelles(file1, max_treshold, resolution=100):
+def calcul_fonctionelles(file1, max_treshold, nb_points = 100): # grace au module minkfncts2d
     F = []
     U = []
     Chi = []
-    for threshold in np.linspace(0.0, max_treshold, resolution):
+    for threshold in np.linspace(0.0, max_treshold, nb_points):
         (f, u, chi) = MF2D(file1, threshold)
         F.append(f)
         U.append(u)
         Chi.append(chi)
     return F, U, Chi
 
-def func_col(arg):
+def func_col(arg): # définition de la couleur des fonctionnelles
     if arg == "f":
         return [1,0,0]
     elif arg == "u":
@@ -23,12 +23,12 @@ def func_col(arg):
         return [0,0,0]
 
 
-def condition_near_0(a,b,c):
+def condition_near_0(a,b,c): # pour déterminer quand la fonctionnelle devient très petite
     return a < 0.01 and b < 0.01 and c < 0.01
 
 
 
-def get_start_end(f):
+def get_start_end(f): # récupérer le seuil auquel les fonctionnelle devient petite
     s,e = 0,len(f)-1
     for i,v in enumerate(f):
         if i > 2:
@@ -36,7 +36,8 @@ def get_start_end(f):
                 e = i
     return s,e
     
-def crop_functional(x,f):
+
+def crop_functional(x,f): # tronque la fonctionnelle
     s,e = get_start_end(f)
     x = x[s:e]
     f = f[s:e]
@@ -47,3 +48,6 @@ def normalize_on_x(x,f): # start = 0.0, end = 40.0):
     x,f = crop_functional(x,f)
     x = np.linspace(s, e, len(x))
     return x,f
+
+def coef_normalization_functional(f):
+    return np.max(np.abs(f))

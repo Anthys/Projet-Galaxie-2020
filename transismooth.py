@@ -66,7 +66,7 @@ def main(myFile):
         le_liste = ["f","u","chi"]
     for i in le_liste:
         h,col = get_right(F,U,Chi, i)
-        b = np.max(h)
+        b = coef_normalization_functional(h)
         if args.nonorm:
             b = 1
         plt.plot(x, np.array(h)/b, color=col + [1] )
@@ -78,7 +78,7 @@ def main(myFile):
         F, U, Chi = calcul_fonctionelles(temp_file1, max_lin)
         for j in le_liste:
             h,col = get_right(F,U,Chi,j)
-            b = np.max(h)
+            b = coef_normalization_functional(f)
             if args.nonorm:
                 b = 1
             plt.plot(x, np.array(h)/b, color=col +[a_values[-i-1]] )
