@@ -132,15 +132,25 @@ def pepper_and_salt(file2, pourcentage):
                     file1[i][j] = 255
     return file1
 
-def adaptive_poisson_noise(img, coef): 
-  noise_mask = np.random.poisson(img*coef) # example : coef = 0.1
-  noisy_img = img + noise_mask
-  return np.clip(noisy_img, 0, 255)
 
-def uniform_poisson_noise(img, parameter):
+def adaptive_poisson_noise(img, coef, truncate=False): 
+  noise_mask = np.random.poisson(img*coef)/coef # example : coef = 1
+  #noisy_img = img + noise_mask 
+  # return the mask instead of adding the mask to the image 
+  # (in order to allow losses of luminosity on some pixels)
+  if truncate:
+    return np.clip(noise_mask, 0, 255) 
+  else:
+    return noise_mask
+
+def uniform_poisson_noise(img, parameter, truncate=False):
   noise_mask = np.random.poisson(parameter, img.shape) # example : parameter = 25
-  noisy_img = img + noise_mask
-  return np.clip(noisy_img, 0, 255)
+  noisy_img = img + noise_mask - parameter*np.ones(np.shape(img)) # the noisy image is more luminous than the initial one
+  if truncate:
+    return np.clip(noisy_img, 0, 255)
+  else:
+    return noisy_img
+
 
 def rotation_X(img,theta):
   img2=[[[] for i in range(len(img[0]))] for j in range(len(img))]
