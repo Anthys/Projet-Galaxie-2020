@@ -41,7 +41,7 @@ def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
       F,U,Chi = calcul_fonctionelles(data_fonctionelles, 256)
       F,U = np.array(F), np.array(U)
       N = np.hstack((F,U))
-      N = N.T
+      N = N
       #print(N.shape)
       #print(matrice_fonctionelles.shape )
 
@@ -63,11 +63,12 @@ def calculer_matrice_base(dat_path, conventionelle_path, max_iter=100):
       #print(matrice_fonctionelles[:,0])
 
 
-  matrice_fonctionelles = matrice_fonctionelles.T
+  matrice_fonctionelles = matrice_fonctionelles
   ligne_S, ligne_C, ligne_A = np.array(ligne_S), np.array(ligne_C), np.array(ligne_A)
 
   final = np.vstack((matrice_fonctionelles,ligne_C,ligne_A,ligne_S))
   final = final.T
+  print(final.shape())
 
   return final
 
@@ -163,17 +164,46 @@ def histograme_valeurs_propres(valeursPropres, n):
   ax.bar(x,y)
   plt.show()
 
+def individus_en_nouvelle_base_tronquée(individus,espp, valeursPropres, n):
+  new_m = np.dot(individus,espp)
+  print(new_m)
+  valeursPropres = [(valeursPropres[i],i) for i in range(len(valeursPropres))]
+  valeursPropres.sort(reverse=True)
+  valeursPropres = valeursPropres[:n]
+  new_m = new_m.T
+  final = ""
+  for i,v in enumerate(valeursPropres):
+    indx = v[1]
+    if i == 0:
+      final = new_m[indx]
+      #print(final)
+    else:
+      final = np.vstack((final, new_m[indx]))
+      #print(final)
+  final = final.T
+  if False:
+    size_window = [5,5]
+    fig = plt.figure(figsize = (*size_window,))
+    for indiv in final:
+      x1 = indiv[0]
+      y1 = indiv[1]
+      print(x1,y1)  
+      plt.scatter(x1,y1)
+    plt.show()
+
+  return final
+
 def rep_on_principal(matriceEspaces, valeursPropres, individus, n=2):
   assert n == 2
-  matriceEspaces = matriceEspaces.T
+  #matriceEspaces = matriceEspaces.T
   valeursPropres = [(valeursPropres[i],i) for i in range(len(valeursPropres))]
   valeursPropres.sort(reverse=True)
   valeursPropres = valeursPropres[:n]
   print(valeursPropres[0], valeursPropres[1])
 
   red = reduction(individus)
-  prim = (matriceEspaces[valeursPropres[0][1]])
-  secund = (matriceEspaces[valeursPropres[1][1]])
+  #prim = (matriceEspaces[valeursPropres[0][1]])
+  #secund = (matriceEspaces[valeursPropres[1][1]])
 
 
   size_window = [5,5]
@@ -275,7 +305,7 @@ def PCA(a, matriceEspaces, valeursPropres, proportion=0.999):
   nb_variables = len(vecteursPropres) # seulement les variables qui contiennent p*100 % de l'info
   nb_galaxies = np.shape(a)[0]
 
-  data_standardized = a.T
+  data_standardized = a
 
   for i in range(nb_galaxies):
     data_standardized[i] = data_standardized[i] - np.mean(data_standardized[i])
@@ -285,7 +315,7 @@ def PCA(a, matriceEspaces, valeursPropres, proportion=0.999):
     if std != 0:
       data_standardized[i] = data_standardized[i]/std
   
-  data_standardized = data_standardized.T
+  data_standardized = data_standardized
 
   result = np.zeros((nb_galaxies, nb_variables))
   for index_variable in range(nb_variables):
