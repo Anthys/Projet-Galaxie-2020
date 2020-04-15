@@ -5,7 +5,16 @@ from libs.pic_process import *
 import matplotlib.pyplot as plt
 
 
-def construire_matrice_base(images_path, max_iter=100):
+def traiter_dat(path):
+  """ Remplace les caractères -, \\x1d, + par d'autres caractères dans les noms des fichiers de path """
+  for i in os.listdir(path):
+    if i[-3:] in ["txt","dat"]:
+      n_name = i.replace("-", "_").replace("\x1d", "").replace("+", "_")
+      print(n_name)
+      os.rename(path + i,path+ n_name)
+
+
+def build_data_matrix(images_path, max_iter=100):
   """ Construit la matrice de données DATA contenant toutes les observations (MF sans ACS) de tous les individus
   - Entrée : chemin relatif vers le dossier contenant toutes les images
   - Sortie : matrice DATA au format n*p avec n le nombre d'individus et p le nombre de variables """ 
@@ -72,3 +81,90 @@ def process_matrix(DATA):
 
   return val_et_espaces     # pas forcément dans l'ordre souhaité
 
+
+def sort_eigenvalues(valeursPropres):
+  """ Rend les valeurs propres triées par ordre décroissant. 
+  - Entrée : tableau des valeurs propres (format numpy)
+  - Sortie : tableau contenant les 3-tuples (val, pourcentage, indice de l'espace propre correspondant)"""
+  
+  valeursPropres = valeursPropres.real
+  for i in range(len(valeursPropres)):
+    if np.isclose(0, valeursPropres[i]):
+      valeursPropres[i] = 0
+    assert valeursPropres[i] >= 0
+  p = sum(valeursPropres)
+  supertuples = [(valeursPropres[i], valeursPropres[i]/p,i) for i in range(len(valeursPropres))]
+  supertuples.sort(reverse=True)
+
+  return supertuples
+
+
+def eigenvalues_histogram(valeursPropres, n):
+  """ Affiche l'histogramme des n valeurs propres les plus importantes de valeursPropres 
+  - Entrée : tableau des valeurs propres (format numpy)""" 
+  assert n <= len(valeursPropres)
+
+  valeursPropres = sort_eigenvalues(valeursPropres)
+
+  fig = plt.figure()
+  ax = fig.add_axes([0.1,0.1,0.8,0.8])
+  valeursPropres = valeursPropres[:n] # Tronquer
+  x,y = [],[]
+  for j in range(len(valeursPropres)):
+    val = valeursPropres[j]
+    x += [j]
+    y += [val[0]]
+  ax.bar(x,y)
+  plt.show()
+
+
+def compute_new_data_matrix(DATA, espp, valeursPropres, n, display2d=False, display3d=False):
+  """ Calcule la nouvelle matrice de données évaluant chaque individu selon les nouvelles variables.\n
+  Si n < len(valeursPropres), la nouvelle matrice comporte uniquement les n variables les plus dispersives.
+  Si display2d est True, affiche la projection des individus dans le plan des 2 variables d'inertie maximale.
+  Si display3d est True, affiche la projection des individus dans l'espace des 3 variables d'inertie maximale.
+  - Entrée : matrice de données initiale, tableau des espaces propres, tableau des valeurs propres (format numpy), nombre de variables voulues
+  - Sortie : nouvelle matrice de données, éventuellement projetée sur un nombre restreint de variables""" 
+
+  assert n <= len(valeursPropres)
+
+  valeursPropres = sort_eigenvalues(valeursPropres)
+  valeursPropres = valeursPropres[:n]
+  
+  new_DATA = np.dot(DATA,espp)    # OU np.dot(DATA, espp.T), on sait pas encore vraiment
+  indexes = []
+  for v in valeursPropres:
+    indexes.append(v[2])
+  new_DATA = new_DATA[:, indexes]
+
+  if display2d:
+    size_window = [5,5]
+    fig = plt.figure(figsize = (*size_window,))
+    for i, indiv in enumerate(new_DATA):
+      x1 = indiv[0]
+      y1 = indiv[1]
+      plt.scatter(x1,y1, c='red')
+      plt.grid()
+      plt.title('Projections de chaque individu sur les 2\n premières composantes principales')
+      plt.xlabel(r"$X'_1$")
+      plt.ylabel(r"$X'_2$")
+
+    plt.show()
+
+  if not display2d and display3d:
+    size_window = [5, 5]
+    fig = plt.figure(figsize = (*size_window,))
+    ax = fig.add_subplot(111, projection='3d')
+    for i, indiv in enumerate(new_DATA):
+      x1 = indiv[0]
+      y1 = indiv[1]
+      z1 = indiv[2]
+      ax.scatter(x1,y1,z1, c='red')
+      ax.set_xlabel(r"$X'_1$")
+      ax.set_ylabel(r"$X'_2$")
+      ax.set_zlabel(r"$X'_3$")
+      plt.title('Projections de chaque individu sur les 3\n premières composantes principales')
+
+    plt.show()
+
+  return new_DATA

@@ -33,20 +33,25 @@ def main():
   if args.load:
     DATA = np.load(args.load)
   else:
-    DATA = construire_matrice_base(args.images_path,20)
+    DATA = build_data_matrix(args.images_path,20)
     if args.save:
         np.save(args.save, DATA)
 
   if args.process:
-    b = process_matrix(DATA)
-    valp,espp = b[0],b[1]
-    print('DATA :', DATA.shape)
-    print('valeurs propres :', valp.shape)
-    print('vecteurs propres :', espp.shape)
+    valp, espp = process_matrix(DATA)
     data_reduced = reduction(DATA)
-    print('data_reduced :', data_reduced.shape)
-    print(np.sum(valp))
-    print(valp)
+    print('shape DATA :', DATA.shape)
+    print('shape valeurs propres :', valp.shape)
+    print('shape vecteurs propres :', espp.shape)
+    print('shape data_reduced :', data_reduced.shape)
+    print('somme des vp :', np.sum(valp))
+    print('tableau des vp :', valp)
+    new_DATA = compute_new_data_matrix(DATA, espp, valp, 4, display2d=True, display3d=False)
+    print('shape new_DATA :', new_DATA.shape)
+    for i in range(4):
+      print('écart-type de la variable', i, ':', np.std(new_DATA[:,i]))
+
+
 
 
 if __name__ == "__main__":
