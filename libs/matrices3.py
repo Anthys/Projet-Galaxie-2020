@@ -149,8 +149,8 @@ def compute_new_data_matrix(DATA, espp, valeursPropres, n, display2d=False, disp
       plt.scatter(x1,y1, c='red')
       plt.grid()
       plt.title('Projections de chaque individu sur les 2\n premières composantes principales')
-      plt.xlabel(r"$X'_1$")
-      plt.ylabel(r"$X'_2$")
+      plt.xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
+      plt.ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
 
     plt.show()
 
@@ -163,11 +163,13 @@ def compute_new_data_matrix(DATA, espp, valeursPropres, n, display2d=False, disp
       y1 = indiv[1]
       z1 = indiv[2]
       ax.scatter(x1,y1,z1, c='red')
-      ax.set_xlabel(r"$X'_1$")
-      ax.set_ylabel(r"$X'_2$")
-      ax.set_zlabel(r"$X'_3$")
+      ax.set_xlabel(r"$Projection sur X'_1 (en unité de \sigma'_1)$")
+      ax.set_ylabel(r"$Projection sur X'_2 (en unité de \sigma'_2)$")
+      ax.set_zlabel(r"$Projection sur X'_3 (en unité de \sigma'_3)$")
       plt.title('Projections de chaque individu sur les 3\n premières composantes principales')
 
     plt.show()
 
   return new_DATA
+
+
