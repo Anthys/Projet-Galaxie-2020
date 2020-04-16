@@ -115,6 +115,9 @@ def eigenvalues_histogram(valeursPropres, n):
     x += [j]
     y += [val[0]]
   ax.bar(x,y)
+  plt.title("Éboulis des valeurs propres")
+  plt.xlabel(r"Indice $i$")
+  plt.ylabel(r"Valeur propre $\delta_i$")
   plt.show()
 
 
@@ -131,7 +134,7 @@ def compute_new_data_matrix(DATA, espp, valeursPropres, n, display2d=False, disp
   valeursPropres = sort_eigenvalues(valeursPropres)
   valeursPropres = valeursPropres[:n]
   
-  new_DATA = np.dot(DATA,espp)    # OU np.dot(DATA, espp.T), on sait pas encore vraiment
+  new_DATA = np.dot(reduction(DATA),espp)   
   indexes = []
   for v in valeursPropres:
     indexes.append(v[2])

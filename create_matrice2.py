@@ -44,14 +44,13 @@ def main():
     print('shape valeurs propres :', valp.shape)
     print('shape vecteurs propres :', espp.shape)
     print('shape data_reduced :', data_reduced.shape)
-    print('somme des vp :', np.sum(valp))
+    print('somme des vp :', np.sum(valp), "pourcentage des 2 premieres :", np.sum(valp[[0, 1]])/np.sum(valp))
     print('tableau des vp :', valp)
-    new_DATA = compute_new_data_matrix(DATA, espp, valp, 4, display2d=True, display3d=False)
+    eigenvalues_histogram(valp, 6)
+    new_DATA = compute_new_data_matrix(DATA, espp, valp, 6, display2d=True, display3d=False)
     print('shape new_DATA :', new_DATA.shape)
-    for i in range(4):
+    for i in range(6):
       print('écart-type de la variable', i, ':', np.std(new_DATA[:,i]))
-
-
 
 
 if __name__ == "__main__":
