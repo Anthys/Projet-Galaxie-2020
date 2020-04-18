@@ -1,29 +1,37 @@
 import numpy as np
+import scipy.linalg
 import os,sys
 from libs.minkos import *
 from libs.pic_process import *
 import matplotlib.pyplot as plt
 
 
-def traiter_dat(path):
+def replace_special_characters(path):
   """ Remplace les caractères -, \\x1d, + par d'autres caractères dans les noms des fichiers de path """
   for i in os.listdir(path):
     if i[-3:] in ["txt","dat"]:
-      n_name = i.replace("-", "_").replace("\x1d", "").replace("+", "_")
-      print(n_name)
-      os.rename(path + i,path+ n_name)
+      n_name = i[:-4].replace("-", "_").replace("\x1d", "").replace("+", "_").replace(".","p")
+      ext = i[-3:]
+    elif i[-4:] == "fits":
+      n_name = i[:-5].replace("-", "_").replace("\x1d", "").replace("+", "_").replace(".","p")
+      ext = i[-4:]
+    else:
+      n_name = i
+    os.rename(path+'/' + i,path+'/'+ n_name+'.'+ext)
 
 
-def build_data_matrix(images_path, max_iter=100):
-  """ Construit la matrice de données DATA contenant toutes les observations (MF sans ACS) de tous les individus
+def build_data_matrix(images_path, max_iter=300):
+  """ Construit la matrice de données DATA contenant toutes les observations (MF sans CAS) de tous les individus
   - Entrée : chemin relatif vers le dossier contenant toutes les images
   - Sortie : matrice DATA au format n*p avec n le nombre d'individus et p le nombre de variables """ 
 
   initial = True
 
   images_list = os.listdir(images_path)
-
+  
   for i,v in enumerate(images_list):
+    print('index :', i)
+    print('name :', v)
     ext = v[-4:]
 
     if i > max_iter:
@@ -33,7 +41,7 @@ def build_data_matrix(images_path, max_iter=100):
       image_file = images_path + "/" + v
 
       data_fonctionnelles = get_image(image_file)
-      data_fonctionnelles = contrastLinear(data_fonctionnelles[0], 70)
+      data_fonctionnelles = contrastLinear(data_fonctionnelles[0], 10**4)
 
       F,U,Chi = calcul_fonctionelles(data_fonctionnelles, 256)
       F,U,Chi = np.array(F), np.array(U), np.array(Chi)
@@ -77,7 +85,9 @@ def process_matrix(DATA):
 
   data_reduced = reduction(DATA)
   matrice_correlation = 1/data_reduced.shape[0] * np.dot(data_reduced.T, data_reduced)
-  val_et_espaces = np.linalg.eig(matrice_correlation)
+  print("matrice_correlation is symetric :", np.all(matrice_correlation == matrice_correlation.T))
+  print("matrice_correlation is real :", np.all(matrice_correlation == np.real(matrice_correlation)))
+  val_et_espaces = scipy.linalg.eigh(matrice_correlation)
 
   return val_et_espaces     # pas forcément dans l'ordre souhaité
 
@@ -163,10 +173,10 @@ def compute_new_data_matrix(DATA, espp, valeursPropres, n, display2d=False, disp
       y1 = indiv[1]
       z1 = indiv[2]
       ax.scatter(x1,y1,z1, c='red')
-      ax.set_xlabel(r"$Projection sur X'_1 (en unité de \sigma'_1)$")
-      ax.set_ylabel(r"$Projection sur X'_2 (en unité de \sigma'_2)$")
-      ax.set_zlabel(r"$Projection sur X'_3 (en unité de \sigma'_3)$")
-      plt.title('Projections de chaque individu sur les 3\n premières composantes principales')
+      ax.set_xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
+      ax.set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
+      ax.set_zlabel(r"Projection sur $X'_3$ (en unité de $\sigma'_3$)")
+      # ax.set_title('Projections de chaque individu sur les 3\n premières composantes principales')
 
     plt.show()
 

@@ -1,5 +1,7 @@
 import os,sys,argparse
 import numpy as np
+import scipy.linalg
+
 from libs.pic_process import *
 from libs.minkos import *
 from libs.matrices3 import *
@@ -33,24 +35,25 @@ def main():
   if args.load:
     DATA = np.load(args.load)
   else:
+    replace_special_characters(args.images_path)
     DATA = build_data_matrix(args.images_path,20)
     if args.save:
         np.save(args.save, DATA)
 
-  if args.process:
-    valp, espp = process_matrix(DATA)
+  if args.process:   
+    print("DATA is real :", np.all(DATA == np.real(DATA)))
     data_reduced = reduction(DATA)
+    valp, espp = process_matrix(DATA)
+    sorted_valp = sort_eigenvalues(valp)
     print('shape DATA :', DATA.shape)
+    print('shape data_reduced :', data_reduced.shape)
     print('shape valeurs propres :', valp.shape)
     print('shape vecteurs propres :', espp.shape)
-    print('shape data_reduced :', data_reduced.shape)
-    print('somme des vp :', np.sum(valp), "pourcentage des 2 premieres :", np.sum(valp[[0, 1]])/np.sum(valp))
-    print('tableau des vp :', valp)
-    eigenvalues_histogram(valp, 6)
-    new_DATA = compute_new_data_matrix(DATA, espp, valp, 6, display2d=True, display3d=False)
+    print('somme des vp :', np.sum(valp), "pourcentage des 2 premieres :", sorted_valp[0][1] + sorted_valp[1][1])
+    # print('tableau des vp :', valp)
+    eigenvalues_histogram(valp, 10)
+    new_DATA = compute_new_data_matrix(DATA, espp, valp, 10, display2d=False, display3d=True)
     print('shape new_DATA :', new_DATA.shape)
-    for i in range(6):
-      print('écart-type de la variable', i, ':', np.std(new_DATA[:,i]))
 
 
 if __name__ == "__main__":
