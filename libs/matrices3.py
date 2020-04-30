@@ -4,6 +4,7 @@ import os,sys
 from libs.minkos import *
 from libs.pic_process import *
 import matplotlib.pyplot as plt
+from matplotlib.path import Path
 
 
 def replace_special_characters(path):
@@ -131,7 +132,7 @@ def eigenvalues_histogram(valeursPropres, n):
   plt.show()
 
 
-def compute_new_data_matrix(DATA, espp, valeursPropres, n, display2d=False, display3d=False):
+def compute_new_data_matrix(DATA, espp, valeursPropres, n):
   """ Calcule la nouvelle matrice de données évaluant chaque individu selon les nouvelles variables.\n
   Si n < len(valeursPropres), la nouvelle matrice comporte uniquement les n variables les plus dispersives.
   Si display2d est True, affiche la projection des individus dans le plan des 2 variables d'inertie maximale.
@@ -150,36 +151,53 @@ def compute_new_data_matrix(DATA, espp, valeursPropres, n, display2d=False, disp
     indexes.append(v[2])
   new_DATA = new_DATA[:, indexes]
 
-  if display2d:
-    size_window = [5,5]
-    fig = plt.figure(figsize = (*size_window,))
-    for i, indiv in enumerate(new_DATA):
-      x1 = indiv[0]
-      y1 = indiv[1]
-      plt.scatter(x1,y1, c='red')
-      plt.grid()
-      plt.title('Projections de chaque individu sur les 2\n premières composantes principales')
-      plt.xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
-      plt.ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
-
-    plt.show()
-
-  if not display2d and display3d:
-    size_window = [5, 5]
-    fig = plt.figure(figsize = (*size_window,))
-    ax = fig.add_subplot(111, projection='3d')
-    for i, indiv in enumerate(new_DATA):
-      x1 = indiv[0]
-      y1 = indiv[1]
-      z1 = indiv[2]
-      ax.scatter(x1,y1,z1, c='red')
-      ax.set_xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
-      ax.set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
-      ax.set_zlabel(r"Projection sur $X'_3$ (en unité de $\sigma'_3$)")
-      # ax.set_title('Projections de chaque individu sur les 3\n premières composantes principales')
-
-    plt.show()
-
   return new_DATA
 
+def plot_DATA_2D(DATA,inside_pol = None):
+  size_window = [5,5]
+  fig = plt.figure(figsize = (*size_window,))
+  for i, indiv in enumerate(DATA):
+    x1 = indiv[0]
+    y1 = indiv[1]
+    if inside_pol == None or is_in_polygon([x1],[y1],inside_pol):
+      plt.scatter(x1,y1, c='red')
+  plt.grid()
+  plt.title('Projections de chaque individu sur les 2\n premières composantes principales')
+  plt.xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
+  plt.ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
 
+  plt.show()
+
+def get_in_polygon(DATA, polygon):
+  out_inx = []
+  shrunk_DATA = []
+  for i, indiv in enumerate(DATA):
+    x1 = indiv[0]
+    y1 = indiv[1]
+    if is_in_polygon([x1],[y1],polygon):
+      out_inx += [i]
+      shrunk_DATA += [indiv]
+  return out_inx, np.float64(shrunk_DATA)
+
+def plot_DATA_3D(DATA):
+  size_window = [5, 5]
+  fig = plt.figure(figsize = (*size_window,))
+  ax = fig.add_subplot(111, projection='3d')
+  for i, indiv in enumerate(DATA):
+    x1 = indiv[0]
+    y1 = indiv[1]
+    z1 = indiv[2]
+    ax.scatter(x1,y1,z1, c='red')
+  ax.set_xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
+  ax.set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
+  ax.set_zlabel(r"Projection sur $X'_3$ (en unité de $\sigma'_3$)")
+  # ax.set_title('Projections de chaque individu sur les 3\n premières composantes principales')
+
+  plt.show()
+
+
+def is_in_polygon(x,y,pol):
+  points = np.vstack((x,y)).T
+  p = Path(pol)
+  grid = p.contains_points(points)
+  return grid

@@ -2,6 +2,10 @@ import os,sys,argparse
 import numpy as np
 import scipy.linalg
 
+
+lib_path = os.path.abspath(os.path.join(__file__, '..', ".."))
+sys.path.append(lib_path)
+
 from libs.pic_process import *
 from libs.minkos import *
 from libs.matrices3 import *
@@ -19,13 +23,15 @@ def init_args():
     global parser, args
 
     parser = argparse.ArgumentParser(description='TakeMeOn')
-    parser.add_argument("images_path", help='', type=str)
     parser.add_argument("-p", "--process", help='',action="store_true")
     parser.add_argument("-n", "--no_treat", help="Pas de traitement et renomage des fichiers (si vous l'avez deja fait)",action="store_true")
     parser.add_argument("-l", "--load", help='Ne calcule pas de matrice et load une matrice déjà faite', type=str)
     parser.add_argument("-s", "--save", help='Sauvegarde la matrice construite', type=str)
 
     args = parser.parse_args()
+    args.no_treat = True
+    args.load = "npy/HST.npy"
+    args.process = True
 
     args.fantom = True
 
@@ -54,10 +60,58 @@ def main():
     # print('tableau des vp :', valp)
     #eigenvalues_histogram(valp, 5)
     new_DATA = compute_new_data_matrix(DATA, espp, valp, 5)
-    polygon = [(-20,10),(10,10),(10,0),(-20,0)]
-    plot_DATA_2D(new_DATA,polygon)
-    print('shape new_DATA :', new_DATA.shape)
+    polygon = [(-20,8),(0,12),(9,10),(10,0),(0,3)]
+    polygon2 = [(-5,3),(13,1),(13,-17),(-1.5,-7.7)]
+    #plot_DATA_2D(new_DATA,polygon)
+    print(new_DATA.shape)
+    inxs,shrunk_NEW_DATA = get_in_polygon(new_DATA, polygon)
+    shrunk_DATA = []
+    for i,indiv in enumerate(DATA):
+      if i in inxs:
+        shrunk_DATA += [indiv]
+    shrunk_DATA = np.float64(shrunk_DATA)
 
+    inxs2,shrunk_NEW_DATA2 = get_in_polygon(new_DATA, polygon2)
+    shrunk_DATA2 = []
+    for i,indiv in enumerate(DATA):
+      if i in inxs2:
+        shrunk_DATA2 += [indiv]
+    shrunk_DATA2 = np.float64(shrunk_DATA2)
+    print(len(inxs))
+    print('shape new_DATA :', new_DATA.shape)
+    size_window = [10,8]
+    fig = plt.figure(figsize = (*size_window,))
+
+
+    mt.global_curve2(DATA)
+    plt.title("Global curve, no polygon")
+    plt.show()
+
+    size_window = [10,8]
+    fig = plt.figure(figsize = (*size_window,))
+    
+    ax = fig.add_subplot(221)
+    michelll(new_DATA, polygon, ax)
+    plt.title("showmewhatyouwant")
+    fig.add_subplot(222)
+    mt.global_curve2(shrunk_DATA)
+    ax = fig.add_subplot(223)
+    michelll(new_DATA, polygon2, ax)
+    plt.title('whatyoureallyreallywant')  
+    fig.add_subplot(224)
+    mt.global_curve2(shrunk_DATA2)
+    plt.show()
+
+def michelll(DATA, polygon,ax):
+  for i, indiv in enumerate(DATA):
+      x1 = indiv[0]
+      y1 = indiv[1]
+      plt.scatter(x1,y1, c='red')
+  poly = plt.Polygon(polygon, fill=False, lw=3)
+  ax.add_patch(poly)
+  plt.grid()
+  #plt.xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
+  #plt.ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
 
 if __name__ == "__main__":
     init_args()
