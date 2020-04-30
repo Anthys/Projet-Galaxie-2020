@@ -182,3 +182,4 @@ def quadrimean(img,x,y):
     if y < len(img) and x < len(img[y]):
       summ += img[y][x]
   return summ/4
+
