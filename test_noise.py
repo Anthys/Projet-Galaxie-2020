@@ -30,7 +30,7 @@ c = adaptive_poisson_noise(c, coef)
 
 ### 3rd test image : simulated galaxy (the range of luminosity is way above 256 pixels, it can go up to 10^8, 10^9)
 
-a = charger_le_putain_de_fichier("DONTPUSH/4_SYNTHESE/output_symm.dat")[0]
+a = charger_fichier_A("DONTPUSH/4_SYNTHESE/output_symm.dat")[0]
 print(a)
 b = a.copy()
 b = uniform_poisson_noise(b, parameter)
