@@ -135,8 +135,6 @@ def eigenvalues_histogram(valeursPropres, n):
 def compute_new_data_matrix(DATA, espp, valeursPropres, n):
   """ Calcule la nouvelle matrice de données évaluant chaque individu selon les nouvelles variables.\n
   Si n < len(valeursPropres), la nouvelle matrice comporte uniquement les n variables les plus dispersives.
-  Si display2d est True, affiche la projection des individus dans le plan des 2 variables d'inertie maximale.
-  Si display3d est True, affiche la projection des individus dans l'espace des 3 variables d'inertie maximale.
   - Entrée : matrice de données initiale, tableau des espaces propres, tableau des valeurs propres (format numpy), nombre de variables voulues
   - Sortie : nouvelle matrice de données, éventuellement projetée sur un nombre restreint de variables""" 
 
@@ -154,6 +152,7 @@ def compute_new_data_matrix(DATA, espp, valeursPropres, n):
   return new_DATA
 
 def plot_DATA_2D(DATA,inside_pol = None):
+  """ Affiche la projection des individus dans le plan des 2 variables d'inertie maximale. """
   size_window = [5,5]
   fig = plt.figure(figsize = (*size_window,))
   for i, indiv in enumerate(DATA):
@@ -169,6 +168,7 @@ def plot_DATA_2D(DATA,inside_pol = None):
   plt.show()
 
 def get_in_polygon(DATA, polygon):
+  """ Récupère les indices et les éléments de DATA qui sont dans le polygone """
   out_inx = []
   shrunk_DATA = []
   for i, indiv in enumerate(DATA):
@@ -180,6 +180,7 @@ def get_in_polygon(DATA, polygon):
   return out_inx, np.float64(shrunk_DATA)
 
 def plot_DATA_3D(DATA):
+  """ Affiche la projection des individus dans l'espace des 3 variables d'inertie maximale. """
   size_window = [5, 5]
   fig = plt.figure(figsize = (*size_window,))
   ax = fig.add_subplot(111, projection='3d')
@@ -197,6 +198,7 @@ def plot_DATA_3D(DATA):
 
 
 def is_in_polygon(x,y,pol):
+  """ Vérifie si les points xy sont dans le polygone pol """
   points = np.vstack((x,y)).T
   p = Path(pol)
   grid = p.contains_points(points)

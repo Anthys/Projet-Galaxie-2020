@@ -126,7 +126,7 @@ def calculer_matrice_base_sans_ACarloS(dat_path, max_iter=100):
       print("Fichier trouvé, en cours de process")
       dat_file = dat_path + "/" + v
 
-      data_fonctionelles = charger_le_putain_de_fichier(dat_file)
+      data_fonctionelles = charger_fichier_A(dat_file)
       data_fonctionelles = contrastLinear(data_fonctionelles[0], 70)
       F,U,Chi = calcul_fonctionelles(data_fonctionelles, 256)
       F,U,Chi = np.array(F), np.array(U), np.array(Chi)

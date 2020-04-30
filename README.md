@@ -4,18 +4,23 @@
 
 | Fichier | Contenu | Type |
 | :-----: | :-----: | :-----: |
-| pic_process.py | Toutes les fonctions de traitement d'images | Pack de fonctions |
+|   |   |   | 
+| pic_process.py | Toutes les fonctions de traitement d'images, bruits | Pack de fonctions |
 | minkos.py | Toutes les fonctions relatives aux fonctionelles de M | Pack de fonctions |
-| matrices.py | Fonctions de calculs sur les matrices | Pack de fonctions |
+| matrices.py | Fonctions de calculs sur les matrices / PCA | Pack de fonctions |
+|   |   |   | 
 | main.py | Calcule les fonctionelles d'une image en format DAT ou FITS | Programme |
 | trasismooth.py | Représente les variations des fonctionelles en fonction du lissage des images | Programme |
 | morpho.py | Utilise la méthode conventionelle pour calculer les paramètres d'une galaxie | Programme |
 | transismoothall.py | Variations des fonctionelles en fonction du lissage séparées en quatre fenêtres | Programme |
 | every.py | Compare toutes les fonctionelles de chaque image présente dans un répertoire | Programme |
 | create_matrice.py | Calcule complètement la matrice des fonctionelles et rend les valeurs propres qu'on recherche | Programme |
+|   |   |   | 
 | test_binary.py | Enregistre les images binaires correspondantes aux maxima/minima locaux | Test |
 | test_crop.py | Crop une fonctionelle en l'arretant lorsqu'elle converge vers 0 | Test |
 | test_binary_interactive.py | Montre les images binarisées en fonction de l'input, s'actualise en temps réel | Test |
+| example_polygon.py | Sélectionne les points dans un Polygon | Test |
+| example_shrunk_data.py | Sélectionne et représente les fonctionelles de deux groupes interressants | Test |
 
 | **Attention: Les fichiers de type "Pack de fonctions" sont utilisés par plusieurs programmes, faire attention lors de leurs modifications.** |
 | --- |
@@ -80,3 +85,11 @@ Exemple de résultat :
 
 <img src="osef/Chat.png" alt="drawing" width="800"/>
 
+## example_polygon.py
+
+<img src="img/mireille.png" alt="drawing" width="800"/>
+
+
+## example_shrunk_data.py
+
+<img src="img/philipon.png" alt="drawing" width="800"/>

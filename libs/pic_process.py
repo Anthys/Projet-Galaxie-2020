@@ -39,20 +39,16 @@ def fantom(file1):
   file2 = np.float64(file2)
   return file2
 
-def smooth_file(file1, valsmooth):
+def smooth_file(file1, size_gauss):
   """
     Lisse une image avec une matrice gaussiene
   """
-  size_gauss = valsmooth
-  img = file1
-  img_zerod = img.copy()
-  # img_zerod[np.isnan(img)] = 0
-  # It is a 9x9 array
-  kernel = Gaussian2DKernel(size_gauss)#x_stddev=1)
-  file1 = scipy_convolve(img, kernel, mode='same', method='direct')
+  kernel = Gaussian2DKernel(size_gauss)
+  file1 = scipy_convolve(file1, kernel, mode='same', method='direct')
   return file1
 
 def get_dat_file(name):
+  """ A 'dat' file is here simply a matrix encoded in a file """ 
   file1 = np.loadtxt(name)
   file1 = np.float64(file1)
   return file1
@@ -62,9 +58,12 @@ def get_fit_file(name):
   file1 = np.float64(file1)
   return file1
 
-def charger_le_putain_de_fichier(path):
+def charger_fichier_A(path):
+  """ Charge les agréables fichiers de Carlo qui sont sous la forme de plusieurs colonnes """
+
   matrix = []
   file_r = open(path, "r")
+
   for line in file_r:
     temp = line.split()
     if temp[0] != "#":
@@ -75,15 +74,12 @@ def charger_le_putain_de_fichier(path):
           matrix.append([])
         if x >= len(matrix[y]):
           matrix[y].append([])
-        if v == 0:
-          pass
-          #print("coucou")
         matrix[y][x] = v
   matrix = np.float64(matrix)
-  name = path.split("/")[1].split(".")[0]
+  name = path.split("/")[-1].split(".")[0]
   return matrix, name
 
-def get_image(path, dat=False):
+def get_image(path, override=""):
   """
     Obtenir une image en format np-array-64, son nom et son extension
   """
@@ -98,12 +94,18 @@ def get_image(path, dat=False):
 
 
   # Récupérer le fichier
-  if dat or ext == "dat":
-    file1 = get_dat_file(path)
-  elif ext == "fits":
-    file1 = get_fit_file(path)
-    # Enlever les pixels fantomes
-    file1 = fantom(file1)
+  if override:
+    if override == "A":
+      file1,name = charger_fichier_A(path)
+      ext = ""
+    else:
+      pass
+  else:
+    if ext == "dat":
+      file1 = get_dat_file(path)
+    elif ext == "fits":
+      file1 = get_fit_file(path)
+      file1 = fantom(file1)
   return file1,name,ext
 
 def degrade(file1, val):
@@ -175,6 +177,11 @@ def rotation_X(img,theta):
 
   return img2
 
+def cool_range(matrix):
+  m = matrix.min()
+  matrix = matrix - m
+  matrix = 255*matrix/matrix.max()
+  return matrix
   
 def quadrimean(img,x,y):
   summ = 0

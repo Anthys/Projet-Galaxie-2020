@@ -38,7 +38,7 @@ def main(myFile):
     x = np.linspace(0.0, max_lin, 100)
 
     #file1, name, ext = get_image(myFile)
-    file1, name = charger_le_putain_de_fichier(myFile)
+    file1, name = charger_fichier_A(myFile)
     print("Processing", name, "...")
 
     if args.smooth:

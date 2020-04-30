@@ -22,7 +22,7 @@ def main(myFile):
 
     #file1, name, ext = get_image(myFile)
     name = myFile.split("/")[1].split(".")[0]
-    file1,name = charger_le_putain_de_fichier(myFile)
+    file1,name = charger_fichier_A(myFile)
     #print(file1)
     #sys.exit()
 
