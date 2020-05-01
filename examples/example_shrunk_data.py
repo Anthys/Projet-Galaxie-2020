@@ -79,27 +79,45 @@ def main():
     shrunk_DATA2 = np.float64(shrunk_DATA2)
     print(len(inxs))
     print('shape new_DATA :', new_DATA.shape)
-    size_window = [10,8]
-    fig = plt.figure(figsize = (*size_window,))
+    if False:
+      size_window = [10,8]
+      fig = plt.figure(figsize = (*size_window,))
 
 
-    mt.global_curve2(DATA)
-    plt.title("Global curve, no polygon")
-    plt.show()
+      mt.global_curve2(DATA)
+      plt.title("Global curve, no polygon")
+      plt.show()
 
-    size_window = [10,8]
+    size_window = [12,8]
     fig = plt.figure(figsize = (*size_window,))
     
-    ax = fig.add_subplot(221)
+    ax = fig.add_subplot(241)
     michelll(new_DATA, polygon, ax)
-    plt.title("showmewhatyouwant")
-    fig.add_subplot(222)
-    mt.global_curve2(shrunk_DATA)
-    ax = fig.add_subplot(223)
+    plt.title("tellmewhatyouwant")
+    fig.add_subplot(242)
+    #print(shrunk_DATA.shape)
+    #print(shrunk_DATA[:,:2].shape)
+    mt.global_curve2(shrunk_DATA[:,:100])
+    plt.title("F")
+    fig.add_subplot(243)
+    mt.global_curve2(shrunk_DATA[:,100:200])
+    plt.title("U")
+    fig.add_subplot(244)
+    mt.global_curve2(shrunk_DATA[:,200:300])
+    plt.title("Chi")
+    ax = fig.add_subplot(245)
     michelll(new_DATA, polygon2, ax)
     plt.title('whatyoureallyreallywant')  
-    fig.add_subplot(224)
-    mt.global_curve2(shrunk_DATA2)
+    fig.add_subplot(246)
+    mt.global_curve2(shrunk_DATA2[:,:100])
+    plt.title("F")
+    fig.add_subplot(247)
+    mt.global_curve2(shrunk_DATA2[:,100:200])
+    plt.title("U")
+    fig.add_subplot(248)
+    mt.global_curve2(shrunk_DATA2[:,200:300])
+    plt.title("Chi")
+    plt.tight_layout()
     plt.show()
 
 def michelll(DATA, polygon,ax):
