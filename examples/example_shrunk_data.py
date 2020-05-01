@@ -30,7 +30,7 @@ def init_args():
 
     args = parser.parse_args()
     args.no_treat = True
-    args.load = "npy/HST.npy"
+    args.load = "examples/HST.npy"
     args.process = True
 
     args.fantom = True
@@ -125,6 +125,9 @@ def michelll(DATA, polygon,ax):
       x1 = indiv[0]
       y1 = indiv[1]
       plt.scatter(x1,y1, c='red')
+      if is_in_polygon([x1],[y1],polygon):
+        plt.scatter(x1,y1, c='blue')
+
   poly = plt.Polygon(polygon, fill=False, lw=3)
   ax.add_patch(poly)
   plt.grid()

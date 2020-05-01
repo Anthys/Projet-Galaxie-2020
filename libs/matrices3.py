@@ -167,6 +167,16 @@ def plot_DATA_2D(DATA,inside_pol = None):
 
   plt.show()
 
+def plot_cool_poly(DATA, polygon):
+  for i, indiv in enumerate(DATA):
+    x1 = indiv[0]
+    y1 = indiv[1]
+    if polygon == None or is_in_polygon([x1],[y1],polygon):
+      plt.scatter(x1,y1, c='blue')
+    else:
+      plt.scatter(x1,y1, c='red')
+  plt.grid()
+
 def get_in_polygon(DATA, polygon):
   """ Récupère les indices et les éléments de DATA qui sont dans le polygone """
   out_inx = []
@@ -203,3 +213,86 @@ def is_in_polygon(x,y,pol):
   p = Path(pol)
   grid = p.contains_points(points)
   return grid
+
+
+def extract_galaxies_data(csv_file):
+  file1 = open(csv_file)
+  keys = []
+  final = {}
+  for i,line in enumerate(file1):
+    if i == 0:
+      keys = line.split(",")
+      keys[-1] = keys[-1].replace("\n", "")
+    else:
+      temp = line.split(",")
+      temp[-1] = temp[-1].replace("\n", "")
+      dico = {}
+      key_name = temp[0]+"_"+temp[1]
+      for j,v in enumerate(keys):
+        dico[v] = float(temp[j])
+      final[key_name] = dico
+  return final
+
+def key_name(galaxy_file):
+  temp = galaxy_file.split("_")
+  return temp[1] + "_" + temp[2]
+
+
+def build_data_matrix2(images_path, max_iter=300):
+  """ Construit la matrice de données DATA contenant toutes les observations (MF sans CAS) de tous les individus
+  - Entrée : chemin relatif vers le dossier contenant toutes les images
+  - Sortie : matrice DATA au format n*p avec n le nombre d'individus et p le nombre de variables """ 
+
+  initial = True
+
+  images_list = os.listdir(images_path)
+  list_of_names = []
+  
+  for i,v in enumerate(images_list):
+    name = v.split(".")[0]
+    ext = v[-4:]
+    print('index :', i)
+    print('name :', name)
+
+    if i > max_iter:
+      break
+    if ext=="fits" or ext==".dat":
+      list_of_names += [name]
+      print("Fichier trouvé, en cours de process")
+      image_file = images_path + "/" + v
+
+      data_fonctionnelles = get_image(image_file)
+      data_fonctionnelles = contrastLinear(data_fonctionnelles[0], 10**4)
+
+      F,U,Chi = calcul_fonctionelles(data_fonctionnelles, 256)
+      F,U,Chi = np.array(F), np.array(U), np.array(Chi)
+      N = np.hstack((F,U,Chi))
+
+      if initial:
+        DATA = N
+        initial = False
+      else:
+        DATA = np.vstack((DATA, N))
+
+  return DATA,list_of_names
+
+def treat_things(list_keys, physical_data):
+  out = {}
+  for i,k in enumerate(list_keys):
+    elmt = physical_data[i]
+    out[k] = {"std":elmt.std(), "moy":elmt.mean(), "med":np.median(elmt)}
+  return out
+
+def as_numpy(physical_data):
+  out = []
+  list_keys = list(physical_data[0].keys())
+
+  for elmt in physical_data:
+    temp = []
+    for k in list_keys:
+      temp += [elmt[k]]
+    out += [temp]
+  
+  out = np.float64(out)
+
+  return list_keys, out.T

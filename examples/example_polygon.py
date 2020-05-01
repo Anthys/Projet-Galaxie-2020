@@ -29,7 +29,7 @@ def init_args():
     args = parser.parse_args()
     args.process = True
     args.no_treat = True
-    args.load = "npy/HST.npy"
+    args.load = "examples/HST.npy"
 
     args.fantom = True
 

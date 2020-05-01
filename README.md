@@ -83,13 +83,28 @@
 
 Exemple de résultat :
 
-<img src="osef/Chat.png" alt="drawing" width="800"/>
+<img src="osef/Chat.png" alt="drawing" width="600"/>
 
 ## example_polygon.py
 
-<img src="img/mireille.png" alt="drawing" width="800"/>
+<img src="img/mireille.png" alt="drawing" width="600"/>
 
 
 ## example_shrunk_data.py
 
-<img src="img/philipon.png" alt="drawing" width="800"/>
+<img src="img/philipon.png" alt="drawing" width="600"/>
+
+
+## example_plot_infos.py
+
+
+<img src="img/plot_infos.png" alt="drawing" width="600"/>
+
+## example_plot_gradient.py
+
+
+<img src="img/plot_gradient.png" alt="drawing" width="600"/>
+
+## example_plot_all_gradient.
+
+[Tous les résultats](osef/grad.md)
