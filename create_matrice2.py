@@ -37,7 +37,7 @@ def main():
     DATA = np.load(args.load)
   else:
     replace_special_characters(args.images_path)
-    DATA = build_data_matrix(args.images_path,20)
+    DATA = build_data_matrix(args.images_path,800)
     if args.save:
         np.save(args.save, DATA)
 
@@ -55,7 +55,7 @@ def main():
     #eigenvalues_histogram(valp, 5)
     new_DATA = compute_new_data_matrix(DATA, espp, valp, 5)
     polygon = [(-20,10),(10,10),(10,0),(-20,0)]
-    plot_DATA_2D(new_DATA,polygon)
+    plot_DATA_3D_in_2D(new_DATA)#,polygon)
     print('shape new_DATA :', new_DATA.shape)
 
 

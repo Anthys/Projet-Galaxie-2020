@@ -106,6 +106,7 @@ def get_image(path, override=""):
     elif ext == "fits":
       file1 = get_fit_file(path)
       file1 = fantom(file1)
+  file1 = cool_range(file1)
   return file1,name,ext
 
 def degrade(file1, val):

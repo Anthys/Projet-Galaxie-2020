@@ -41,11 +41,16 @@ def build_data_matrix(images_path, max_iter=300):
       print("Fichier trouvé, en cours de process")
       image_file = images_path + "/" + v
 
-      data_fonctionnelles = get_image(image_file)
-      data_fonctionnelles = contrastLinear(data_fonctionnelles[0], 10**4)
+      data_fonctionnelles = get_image(image_file)[0]
+      #data_fonctionnelles = contrastLinear(data_fonctionnelles[0], 10**4)
 
       F,U,Chi = calcul_fonctionelles(data_fonctionnelles, 256)
       F,U,Chi = np.array(F), np.array(U), np.array(Chi)
+      
+      F = normaliser(F)
+      U = normaliser(U)
+      Chi = normaliser(Chi)
+      
       N = np.hstack((F,U,Chi))
 
       if initial:
@@ -56,6 +61,22 @@ def build_data_matrix(images_path, max_iter=300):
 
   return DATA
 
+
+def normaliser2(func):
+  a = np.min(func)
+  func = func - a
+  b = np.max(func)
+  if b != 0:
+    return func/b
+  else:
+    return func
+
+def normaliser(func):
+  a = np.max(np.abs(func))
+  if a != 0:
+    return func/a
+  else:
+    return func
 
 def reduction(m):
   """Réduit la matrice m, c'est-à-dire :

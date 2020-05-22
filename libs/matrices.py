@@ -126,10 +126,10 @@ def global_curve(data):
   ax = plt.gca()
   ax.plot(x, means)
   ax.fill_between(x, [means[i]+stds[i] for i in range(len(x))], [means[i]-stds[i] for i in range(len(x))], facecolor='blue', alpha=0.5)
-  plt.show()
+  
 
 
-def global_curve2(data):
+def global_curve2(data, col="blue"):
   """ Représente la courbe de la moyenne des fonctions avec leurs écarts types """
   data = data.T
   final = []
@@ -140,8 +140,8 @@ def global_curve2(data):
   means = [i[0] for i in final]
   stds = [i[1] for i in final]
   ax = plt.gca()
-  ax.plot(x, means)
-  ax.fill_between(x, [means[i]+stds[i] for i in range(len(x))], [means[i]-stds[i] for i in range(len(x))], facecolor='blue', alpha=0.5)
+  ax.plot(x, means, color = col)
+  ax.fill_between(x, [means[i]+stds[i] for i in range(len(x))], [means[i]-stds[i] for i in range(len(x))], facecolor=col, alpha=0.5)
 
 def val_prop_espace(valeursPropres):
   """ Rends les valeurs propres triées de la plus informative à la moins informative, sous la forme (val, pourcentage, indice de l'espace propre) """
