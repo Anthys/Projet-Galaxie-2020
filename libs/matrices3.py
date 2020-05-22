@@ -206,6 +206,73 @@ def plot_DATA_3D(DATA):
 
   plt.show()
 
+from matplotlib import colors
+import matplotlib.pylab as plb
+import matplotlib as mpl
+def plot_DATA_3D_in_2D(DATA):
+  """ Affiche la projection des individus dans l'espace des 3 variables d'inertie maximale. """
+  size_window = [5, 5]
+  fig = plt.figure(figsize = (*size_window,))
+  ax = fig.add_subplot(111)
+  l_x = []
+  l_y = []
+  l_c = []
+  for i, indiv in enumerate(DATA):
+    x1 = indiv[0]
+    y1 = indiv[1]
+    z1 = indiv[2]
+    l_x.append(x1)
+    l_y.append(y1)
+    l_c.append(z1)
+  q1 = np.quantile(l_c, 0.05)
+  q3 = np.quantile(l_c, 0.95)
+  n = 10
+  part =(q3-q1)/n
+  for i,v in enumerate(l_c):
+    l_c[i] = clamp(q1,v,q3)
+
+  # tell imshow about color map so that only set colors are used
+  #ax.scatter(l_x,l_y,c=l_c)
+
+
+  #catter_seq(fig,ax,l_x,l_y,l_c,q1,q3,10)
+  scatter_cont(fig, ax, l_x, l_y, l_c)
+  ax.set_xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
+  ax.set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
+  #ax.set_zlabel(r"Projection sur $X'_3$ (en unité de $\sigma'_3$)")
+  # ax.set_title('Projections de chaque individu sur les 3\n premières composantes principales')
+
+  plt.show()
+
+def scatter_cont(fig,ax,x,y,c):
+  plt.scatter(x, y, c=c,cmap="viridis")
+  plt.colorbar()
+
+def scatter_seq(fig,ax, x,y,c,mi,ma,n):
+  cmap = plt.cm.jet  # define the colormap
+  # extract all colors from the .jet map
+  cmaplist = [cmap(i) for i in range(cmap.N)]
+  # force the first color entry to be grey
+  #cmaplist[0] = (.5, .5, .5, 1.0)
+
+  # create the new map
+  cmap = colors.LinearSegmentedColormap.from_list(
+      'Custom cmap', cmaplist, cmap.N)
+
+  # define the bins and normalize
+  bounds = np.linspace(mi,ma, n)
+  norm = colors.BoundaryNorm(bounds, cmap.N)
+
+  # make the scatter
+  scat = ax.scatter(x, y, c=c,cmap=cmap, norm=norm)
+
+  # create a second axes for the colorbar
+  ax2 = fig.add_axes([0.95, 0.1, 0.03, 0.8])
+  cb = mpl.colorbar.ColorbarBase (ax2, cmap=cmap, norm=norm,
+  spacing='proportional', ticks=bounds, boundaries=bounds, format='%1i')
+
+def clamp(a,b,c):
+  return min(max(a,b),c)
 
 def is_in_polygon(x,y,pol):
   """ Vérifie si les points xy sont dans le polygone pol """
@@ -263,6 +330,38 @@ def build_data_matrix2(images_path, max_iter=300):
 
       data_fonctionnelles = get_image(image_file)
       data_fonctionnelles = contrastLinear(data_fonctionnelles[0], 10**4)
+
+      F,U,Chi = calcul_fonctionelles(data_fonctionnelles, 256)
+      F,U,Chi = np.array(F), np.array(U), np.array(Chi)
+      N = np.hstack((F,U,Chi))
+
+      if initial:
+        DATA = N
+        initial = False
+      else:
+        DATA = np.vstack((DATA, N))
+
+  return DATA,list_of_names
+
+def build_data_matrix3(list_of_images, max_iter=300):
+  """ Construit la matrice de données DATA contenant toutes les observations (MF sans CAS) de tous les individus
+  - Entrée : chemin relatif vers le dossier contenant toutes les images
+  - Sortie : matrice DATA au format n*p avec n le nombre d'individus et p le nombre de variables """ 
+
+  initial = True
+
+  list_of_names = []
+  
+  for i,v in enumerate(list_of_images):
+
+    if i > max_iter:
+      break
+    if True:
+      list_of_names += [str(i)]
+      print("Fichier trouvé, en cours de process")
+
+      data_fonctionnelles = v
+      data_fonctionnelles = contrastLinear(data_fonctionnelles, 100)
 
       F,U,Chi = calcul_fonctionelles(data_fonctionnelles, 256)
       F,U,Chi = np.array(F), np.array(U), np.array(Chi)
