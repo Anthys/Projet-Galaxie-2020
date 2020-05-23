@@ -51,11 +51,11 @@ def main():
     print('shape valeurs propres :', valp.shape)
     print('shape vecteurs propres :', espp.shape)
     print('somme des vp :', np.sum(valp), "pourcentage des 2 premieres :", sorted_valp[0][1] + sorted_valp[1][1])
-    # print('tableau des vp :', valp)
-    #eigenvalues_histogram(valp, 5)
-    new_DATA = compute_new_data_matrix(DATA, espp, valp, 5)
-    polygon = [(-20,10),(10,10),(10,0),(-20,0)]
-    plot_DATA_3D_in_2D(new_DATA)#,polygon)
+    print('tableau des vp :', valp)
+    eigenvalues_histogram(valp, 10)
+    new_DATA = compute_new_data_matrix(DATA, espp, valp, 8)
+    #polygon = [(-20,10),(10,10),(10,0),(-20,0)]
+    plot_DATA_2D_with_clustering(new_DATA, 5)#,polygon)
     print('shape new_DATA :', new_DATA.shape)
 
 
