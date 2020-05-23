@@ -37,7 +37,7 @@ def main():
     DATA = np.load(args.load)
   else:
     replace_special_characters(args.images_path)
-    DATA = build_data_matrix(args.images_path,800)
+    DATA = build_data_matrix(args.images_path,900)
     if args.save:
         np.save(args.save, DATA)
 
