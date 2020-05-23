@@ -5,6 +5,7 @@ from libs.minkos import *
 from libs.pic_process import *
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
+from sklearn.cluster import KMeans
 
 
 def replace_special_characters(path):
@@ -230,6 +231,7 @@ def plot_DATA_3D(DATA):
 from matplotlib import colors
 import matplotlib.pylab as plb
 import matplotlib as mpl
+
 def plot_DATA_3D_in_2D(DATA):
   """ Affiche la projection des individus dans l'espace des 3 variables d'inertie maximale. """
   size_window = [5, 5]
@@ -265,8 +267,8 @@ def plot_DATA_3D_in_2D(DATA):
 
   plt.show()
 
-def scatter_cont(fig,ax,x,y,c):
-  plt.scatter(x, y, c=c,cmap="viridis")
+def scatter_cont(fig,ax,x,y,c, mark="."):
+  plt.scatter(x, y, c=c,cmap="viridis", marker=mark)
   plt.colorbar()
 
 def scatter_seq(fig,ax, x,y,c,mi,ma,n):
@@ -416,3 +418,41 @@ def as_numpy(physical_data):
   out = np.float64(out)
 
   return list_keys, out.T
+
+def find_clusters(new_DATA, nb_clusters):
+  kmeans = KMeans(n_clusters=nb_clusters, n_init=50).fit(new_DATA)
+  labels = kmeans.labels_
+  likeliness = kmeans.inertia_
+  return labels, likeliness
+
+def plot_DATA_2D_with_clustering(DATA, nb_clusters):
+  """ Affiche la projection des individus dans l'espace des 3 variables d'inertie maximale avec clustering. """
+  if nb_clusters > 8:
+    print("Not enough markers to distinguish all the clusters. Clusters 9th to last wont be marked.")
+  labels, likeliness = find_clusters(DATA, nb_clusters)
+  print("Likeliness :", likeliness)
+  K = np.max(labels)
+  markerslist = [r"$\mathcal{A}$", r"$\mathcal{B}$", r"$\mathcal{C}$", r"$\mathcal{D}$", r"$\mathcal{E}$", r"$\mathcal{F}$", r"$\mathcal{G}$", r"$\mathcal{H}$"]
+  size_window = [5, 5]
+  fig = plt.figure(figsize = (*size_window,))
+  ax = fig.add_subplot(111)
+
+  for k in range(K+1):  
+    l_x = []
+    l_y = []
+    for i, label in enumerate(labels):
+      if label==k:
+        indiv = DATA[i]
+        x1 = indiv[0]
+        y1 = indiv[1]
+        l_x.append(x1)
+        l_y.append(y1)
+
+    plt.scatter(l_x, l_y,cmap="viridis", marker=markerslist[k])
+
+  ax.set_xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
+  ax.set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
+  #ax.set_zlabel(r"Projection sur $X'_3$ (en unité de $\sigma'_3$)")
+  # ax.set_title('Projections de chaque individu sur les 3\n premières composantes principales')
+
+  plt.show()
