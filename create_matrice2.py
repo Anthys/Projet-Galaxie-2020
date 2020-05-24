@@ -50,13 +50,20 @@ def main():
     print('shape data_reduced :', data_reduced.shape)
     print('shape valeurs propres :', valp.shape)
     print('shape vecteurs propres :', espp.shape)
-    print('somme des vp :', np.sum(valp), "pourcentage des 2 premieres :", sorted_valp[0][1] + sorted_valp[1][1])
-    print('tableau des vp :', valp)
+    print('somme des vp :', np.sum(valp), "pourcentage des 3 premieres :", sorted_valp[0][1] + sorted_valp[1][1] + sorted_valp[2][1])
+    #print('tableau des vp :', valp)
     eigenvalues_histogram(valp, 10)
     new_DATA = compute_new_data_matrix(DATA, espp, valp, 8)
-    #polygon = [(-20,10),(10,10),(10,0),(-20,0)]
-    plot_DATA_2D_with_clustering(new_DATA, 5)#,polygon)
     print('shape new_DATA :', new_DATA.shape)
+    Nb_Cl = [i for i in range(2, 11)]
+    Inertia = []
+    for i in Nb_Cl:
+      Inertia.append(find_clusters(new_DATA, i)[1])
+    plt.plot(Nb_Cl, Inertia)
+    plt.xlabel("Nombre de clusters")
+    plt.ylabel("Inertie")
+    plt.show()
+    plot_DATA_2D_with_clustering(new_DATA, 5)
 
 
 if __name__ == "__main__":
