@@ -55,15 +55,15 @@ def main():
     eigenvalues_histogram(valp, 10)
     new_DATA = compute_new_data_matrix(DATA, espp, valp, 8)
     print('shape new_DATA :', new_DATA.shape)
-    Nb_Cl = [i for i in range(2, 11)]
-    Inertia = []
-    for i in Nb_Cl:
-      Inertia.append(find_clusters(new_DATA, i)[1])
-    plt.plot(Nb_Cl, Inertia)
-    plt.xlabel("Nombre de clusters")
-    plt.ylabel("Inertie")
-    plt.show()
-    plot_DATA_2D_with_clustering(new_DATA, 5)
+    #Nb_Cl = [i for i in range(2, 27)]
+    #Inertia = []
+    #for i in Nb_Cl:
+      #Inertia.append(find_clusters(new_DATA, i)[1])
+    #plt.plot(Nb_Cl, Inertia)
+    #plt.xlabel("Nombre de clusters")
+    #plt.ylabel("Inertie")
+    #plt.show()
+    plot_DATA_2D_with_clustering(new_DATA, 11)
 
 
 if __name__ == "__main__":
