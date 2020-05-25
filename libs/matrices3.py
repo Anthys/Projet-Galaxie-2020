@@ -425,7 +425,8 @@ def find_clusters(new_DATA, nb_clusters):
   inertia = kmeans.inertia_
   return labels, inertia
 
-def plot_DATA_2D_with_clustering(DATA, nb_clusters):
+def plot_DATA_2D_with_clustering(DATA, nb_clusters, verbose=None):
+  """A DETRUIRE"""
   """ Affiche la projection des individus dans l'espace des 3 variables d'inertie maximale avec clustering. """
   if nb_clusters > 26:
     print("Not enough markers to distinguish all the clusters.")
@@ -459,3 +460,57 @@ def plot_DATA_2D_with_clustering(DATA, nb_clusters):
   ax.set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
   plt.legend()
   plt.show()
+
+
+def get_DATA_2D_in_clusters(DATA, nb_clusters, verbose=None):
+  """A DETRUIRE"""
+  """ Affiche la projection des individus dans l'espace des 3 variables d'inertie maximale avec clustering. """
+  if nb_clusters > 26:
+    print("Not enough markers to distinguish all the clusters.")
+  labels, inertia = find_clusters(DATA, nb_clusters)
+  print("Inertia :", inertia)
+  return labels, inertia
+
+def plot_DATA_2D_in_clusters(DATA, labels):
+  K = np.max(labels)
+  markerslist = [r"$\mathcal{A}$", r"$\mathcal{B}$", r"$\mathcal{C}$", r"$\mathcal{D}$", 
+  r"$\mathcal{E}$", r"$\mathcal{F}$", r"$\mathcal{G}$", r"$\mathcal{H}$", r"$\mathcal{I}$", 
+  r"$\mathcal{J}$", r"$\mathcal{K}$", r"$\mathcal{L}$", r"$\mathcal{M}$", r"$\mathcal{N}$",
+  r"$\mathcal{O}$", r"$\mathcal{P}$", r"$\mathcal{Q}$", r"$\mathcal{R}$", r"$\mathcal{S}$",
+  r"$\mathcal{T}$", r"$\mathcal{U}$", r"$\mathcal{V}$", r"$\mathcal{W}$", r"$\mathcal{X}$",
+  r"$\mathcal{Y}$", r"$\mathcal{Z}$"]
+  size_window = [5, 5]
+  fig = plt.figure(figsize = (*size_window,))
+  ax = fig.add_subplot(111)
+
+  for k in range(K+1):  
+    l_x = []
+    l_y = []
+    for i, label in enumerate(labels):
+      if label==k:
+        indiv = DATA[i]
+        x1 = indiv[0]
+        y1 = indiv[1]
+        l_x.append(x1)
+        l_y.append(y1)
+
+    plt.scatter(l_x, l_y,cmap="viridis", marker=markerslist[k], label="Group "+markerslist[k])
+
+  ax.set_xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
+  ax.set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
+  plt.legend()
+  plt.show()
+
+def print_names_in_cluster(DATA, labels, names):
+  out = {}
+  for i in range(len(labels)):
+    v = labels[i]
+    if not v in out.keys():
+      out[v] = []
+    out[v] += [names[i]]
+
+  for j in out.keys():
+    print("Cluster n0:"  +str(j))
+    for v in out[j]:
+      print("  " + str(v))
+    
