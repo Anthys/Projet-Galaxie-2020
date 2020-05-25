@@ -427,12 +427,17 @@ def find_clusters(new_DATA, nb_clusters):
 
 def plot_DATA_2D_with_clustering(DATA, nb_clusters):
   """ Affiche la projection des individus dans l'espace des 3 variables d'inertie maximale avec clustering. """
-  if nb_clusters > 10:
+  if nb_clusters > 26:
     print("Not enough markers to distinguish all the clusters.")
   labels, inertia = find_clusters(DATA, nb_clusters)
   print("Inertia :", inertia)
   K = np.max(labels)
-  markerslist = [r"$\mathcal{A}$", r"$\mathcal{B}$", r"$\mathcal{C}$", r"$\mathcal{D}$", r"$\mathcal{E}$", r"$\mathcal{F}$", r"$\mathcal{G}$", r"$\mathcal{H}$", r"$\mathcal{I}$", r"$\mathcal{J}$", r"$\mathcal{K}$"]
+  markerslist = [r"$\mathcal{A}$", r"$\mathcal{B}$", r"$\mathcal{C}$", r"$\mathcal{D}$", 
+  r"$\mathcal{E}$", r"$\mathcal{F}$", r"$\mathcal{G}$", r"$\mathcal{H}$", r"$\mathcal{I}$", 
+  r"$\mathcal{J}$", r"$\mathcal{K}$", r"$\mathcal{L}$", r"$\mathcal{M}$", r"$\mathcal{N}$",
+  r"$\mathcal{O}$", r"$\mathcal{P}$", r"$\mathcal{Q}$", r"$\mathcal{R}$", r"$\mathcal{S}$",
+  r"$\mathcal{T}$", r"$\mathcal{U}$", r"$\mathcal{V}$", r"$\mathcal{W}$", r"$\mathcal{X}$",
+  r"$\mathcal{Y}$", r"$\mathcal{Z}$"]
   size_window = [5, 5]
   fig = plt.figure(figsize = (*size_window,))
   ax = fig.add_subplot(111)
