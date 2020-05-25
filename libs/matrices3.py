@@ -351,11 +351,15 @@ def build_data_matrix2(images_path, max_iter=300):
       print("Fichier trouvé, en cours de process")
       image_file = images_path + "/" + v
 
-      data_fonctionnelles = get_image(image_file)
-      data_fonctionnelles = contrastLinear(data_fonctionnelles[0], 10**4)
+      data_fonctionnelles = get_image(image_file)[0]
 
       F,U,Chi = calcul_fonctionelles(data_fonctionnelles, 256)
       F,U,Chi = np.array(F), np.array(U), np.array(Chi)
+
+      F = normaliser(F)
+      U = normaliser(U)
+      Chi = normaliser(Chi)
+
       N = np.hstack((F,U,Chi))
 
       if initial:
