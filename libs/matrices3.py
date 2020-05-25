@@ -467,7 +467,6 @@ def plot_DATA_2D_with_clustering(DATA, nb_clusters, verbose=None):
 
 
 def get_DATA_2D_in_clusters(DATA, nb_clusters, verbose=None):
-  """A DETRUIRE"""
   """ Affiche la projection des individus dans l'espace des 3 variables d'inertie maximale avec clustering. """
   if nb_clusters > 26:
     print("Not enough markers to distinguish all the clusters.")
@@ -518,3 +517,17 @@ def print_names_in_cluster(DATA, labels, names):
     for v in out[j]:
       print("  " + str(v))
     
+def show_images_from_names(names, folder, n):
+  iterm = min(len(names), n*n)
+  curi = 0
+  for i in range(iterm):
+    v = names[v]
+    try:
+      img = get_image(folder + "/" + v)[0]
+    except Exception as e:
+      pass
+    else:
+      plt.subplot(n,n, curi)
+      plt.imshow(img, cmap="viridis")
+
+  plt.show()
