@@ -65,7 +65,7 @@ def main():
     #plt.xlabel("Nombre de clusters")
     #plt.ylabel("Inertie")
     #plt.show()
-    labels, intertia = get_DATA_2D_in_clusters(new_DATA, 11)
+    labels, inertia = get_DATA_2D_in_clusters(new_DATA, 11)
     print_names_in_cluster(new_DATA, labels, names)
     plot_DATA_2D_in_clusters(new_DATA, labels)
 
