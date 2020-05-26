@@ -47,7 +47,7 @@
 
 ### Exemple de résultat:
 
-<img src="datfiles/spiraleBarreeA_Chi.png" alt="drawing" width="300"/><img src="datfiles/spiraleBarreeA_U.png" alt="drawing" width="300"/><img src="datfiles/spiraleBarreeA_F.png" alt="drawing" width="300"/>
+<img src="img/alpha/spiraleBarreeA_Chi.png" alt="drawing" width="300"/><img src="img/alpha/spiraleBarreeA_U.png" alt="drawing" width="300"/><img src="img/alpha/spiraleBarreeA_F.png" alt="drawing" width="300"/>
 
 ## morpho.py
   `python morpho.py [FITS ou DAT file] [optional args]`
