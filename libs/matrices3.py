@@ -520,13 +520,17 @@ def print_names_in_cluster(DATA, labels, names):
 def show_images_from_names(names, folder, n):
   iterm = min(len(names), n*n)
   curi = 0
+  size_window = [5, 5]
+  fig = plt.figure(figsize = (*size_window,))
+
   for i in range(iterm):
-    v = names[v]
+    v = names[i]
     try:
       img = get_image(folder + "/" + v)[0]
     except Exception as e:
       pass
     else:
+      curi += 1
       plt.subplot(n,n, curi)
       plt.imshow(img, cmap="viridis")
 
