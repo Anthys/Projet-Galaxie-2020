@@ -154,6 +154,10 @@ def uniform_poisson_noise(img, parameter, truncate=False):
   else:
     return noisy_img
 
+ def gaussian_noise(img, std):
+    noise_mask = np.random.normal(0, std, img.shape)  # std : standard deviation
+    noisy_img = img + noise_mask
+    return noisy_img
 
 def rotation_X(img,theta):
   img2=[[[] for i in range(len(img[0]))] for j in range(len(img))]
