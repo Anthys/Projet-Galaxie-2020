@@ -52,7 +52,7 @@ def main():
     print('shape vecteurs propres :', espp.shape)
     print('somme des vp :', np.sum(valp), "pourcentage des 3 premieres :", sorted_valp[0][1] + sorted_valp[1][1] + sorted_valp[2][1])
     #print('tableau des vp :', valp)
-    eigenvalues_histogram(valp, 10)
+    #eigenvalues_histogram(valp, 10)
     new_DATA = compute_new_data_matrix(DATA, espp, valp, 8)
     print('shape new_DATA :', new_DATA.shape)
     #Nb_Cl = [i for i in range(2, 27)]
@@ -63,7 +63,41 @@ def main():
     #plt.xlabel("Nombre de clusters")
     #plt.ylabel("Inertie")
     #plt.show()
-    plot_DATA_2D_with_clustering(new_DATA, 11)
+
+
+    labels, intertia = get_DATA_2D_in_clusters(new_DATA, 5)
+
+    if True:
+      separ_DATA = {}
+      for i, indiv in enumerate(DATA):
+        v = labels[i]
+        if v not in separ_DATA.keys():
+          separ_DATA[v] = []
+        separ_DATA[v] += [indiv]
+      for k,v in separ_DATA.items():
+        separ_DATA[k] = np.float64(separ_DATA[k])
+      cols = ["blue", "orange", "green", "yellow", "red", "grey", "brown", "pink", "purple", "cyan", "beige", "deeppink"]
+    
+      mxi = min(5, len(cols), len(separ_DATA.keys()))
+      size_window = [12,8]
+      fig = plt.figure(figsize = (*size_window,))
+      fig.add_subplot(1,4,2)
+      for i,k in enumerate(separ_DATA.keys()):
+        if i < mxi:
+          mt.global_curve2(separ_DATA[k][:,:100], cols[i])
+      fig.add_subplot(1,4,3)
+      for i,k in enumerate(separ_DATA.keys()):
+        if i < mxi:
+          mt.global_curve2(separ_DATA[k][:,100:200], cols[i])
+      fig.add_subplot(1,4,4)
+      for i,k in enumerate(separ_DATA.keys()):
+        if i < mxi:
+          mt.global_curve2(separ_DATA[k][:,200:300], cols[i])
+
+
+    fig.add_subplot(1,4,1)
+    plot_DATA_2D_in_clusters(new_DATA, labels)
+    plt.show()
 
 
 if __name__ == "__main__":

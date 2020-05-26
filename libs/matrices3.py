@@ -478,9 +478,6 @@ def plot_DATA_2D_in_clusters(DATA, labels):
   r"$\mathcal{O}$", r"$\mathcal{P}$", r"$\mathcal{Q}$", r"$\mathcal{R}$", r"$\mathcal{S}$",
   r"$\mathcal{T}$", r"$\mathcal{U}$", r"$\mathcal{V}$", r"$\mathcal{W}$", r"$\mathcal{X}$",
   r"$\mathcal{Y}$", r"$\mathcal{Z}$"]
-  size_window = [5, 5]
-  fig = plt.figure(figsize = (*size_window,))
-  ax = fig.add_subplot(111)
 
   for k in range(K+1):  
     l_x = []
@@ -495,10 +492,9 @@ def plot_DATA_2D_in_clusters(DATA, labels):
 
     plt.scatter(l_x, l_y,cmap="viridis", marker=markerslist[k], label="Group "+markerslist[k])
 
-  ax.set_xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
-  ax.set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
+  plt.gca().set_xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
+  plt.gca().set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
   plt.legend()
-  plt.show()
 
 def print_names_in_cluster(DATA, labels, names):
   out = {}
