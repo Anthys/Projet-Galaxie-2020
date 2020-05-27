@@ -128,7 +128,7 @@ def pepper_and_salt(file2, pourcentage):
         for j in range(len(file1[i])):
             lepourcentagealeatoire = random()
             if lepourcentagealeatoire <= pourcentage:
-                lenombrealeatoire = randint(0, 2)
+                lenombrealeatoire = randint(0, 1)
                 if lenombrealeatoire == 0:
                     file1[i][j] = 0
                 elif lenombrealeatoire == 1:
@@ -154,10 +154,10 @@ def uniform_poisson_noise(img, parameter, truncate=False):
   else:
     return noisy_img
 
- def gaussian_noise(img, std):
-    noise_mask = np.random.normal(0, std, img.shape)  # std : standard deviation
-    noisy_img = img + noise_mask
-    return noisy_img
+def gaussian_noise(img, std):
+  noise_mask = np.random.normal(0, std, img.shape)  # std : standard deviation
+  noisy_img = img + noise_mask
+  return noisy_img
 
 def rotation_X(img,theta):
   img2=[[[] for i in range(len(img[0]))] for j in range(len(img))]
