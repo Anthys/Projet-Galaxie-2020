@@ -128,7 +128,7 @@ def pepper_and_salt(file2, pourcentage):
         for j in range(len(file1[i])):
             lepourcentagealeatoire = random()
             if lepourcentagealeatoire <= pourcentage:
-                lenombrealeatoire = randint(0, 2)
+                lenombrealeatoire = randint(0, 1)
                 if lenombrealeatoire == 0:
                     file1[i][j] = 0
                 elif lenombrealeatoire == 1:
