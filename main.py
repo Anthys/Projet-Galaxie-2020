@@ -24,8 +24,8 @@ def main(myFile):
     
 
     # Réhausser le contraste # ?? (comment multiplier par k peut augmenter le contraste ?)
-    if args.contrastLinear:
-        file1 = contrastLinear(file1, args.contrastLinear)
+    #if args.contrastLinear:
+        #file1 = contrastLinear(file1, args.contrastLinear)
         
     # Tronquer la fonction à args.max  
     max_lin = 40
@@ -38,7 +38,6 @@ def main(myFile):
 
     # Calcul des fonctionnelles
     F, U, Chi = calcul_fonctionelles(file1, max_lin)
-    
 
     # Visuels
     
@@ -46,9 +45,10 @@ def main(myFile):
 
     fig = plt.figure(figsize = (*size_window,))
     fig.add_subplot(121)
-    plt.title("Galaxy - "+name)
+    plt.title("Galaxie - "+name)
     print(file1)
     plt.imshow(file1, cmap="viridis")
+    plt.colorbar()
 
     fig.add_subplot(122)
     x = np.linspace(0.0, max_lin, 100)
@@ -60,9 +60,10 @@ def main(myFile):
     plt.plot(x, np.array(F)/a, color = func_col("f"))
     plt.plot(x, np.array(U)/b, color = func_col("u"))
     plt.plot(x, np.array(Chi)/c, color = func_col("chi"))
-    plt.title("2D Minkowski Functions")
-    plt.legend(["F (Area)", "U (Boundary)", "$\chi$ (Euler characteristic)"], bbox_to_anchor =(1,-0.2), loc = "upper right")
-    plt.xlabel("Threshold")
+    plt.title("Fonctions de Minkowski")
+    plt.legend([r"Aire $F$", r"Périmètre $U$", r"Caractéristique d'Euler $\chi$"], bbox_to_anchor =(1,-0.2), loc = "upper right")
+    plt.xlabel(r"Seuil $\nu$")
+    plt.ylabel(r"Fonctionnelles   $\dfrac{V_\mu(\nu)}{\max(|V_\mu(\nu)|}$")
     plt.tight_layout()
 
     # Fin
