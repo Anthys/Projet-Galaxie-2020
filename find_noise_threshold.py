@@ -60,7 +60,7 @@ def main(myFile):
     print(threshold)
 
     file2 = file1.copy()
-    file2 = file2 >= threshold
+    file2[file2 < threshold] = 0
 
     fig.add_subplot(133)
     plt.imshow(file2, cmap="viridis")
