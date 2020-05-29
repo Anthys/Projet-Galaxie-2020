@@ -3,8 +3,10 @@ import math
 
 from astropy.io import fits
 from scipy.signal import convolve as scipy_convolve
+from scipy import signal
 from astropy.convolution import Gaussian2DKernel
 from random import *
+from copy import copy
 
 
 
@@ -195,3 +197,30 @@ def quadrimean(img,x,y):
       summ += img[y][x]
   return summ/4
 
+def second_inflexion_point(file1):
+
+  file1 = np.clip(np.rint(file1), 0, 255)
+    
+  NbOccurs = []
+  threshold = [i for i in range(256)]
+  for i in threshold:
+    Occurs_i = np.count_nonzero(file1 == i)
+    NbOccurs.append(Occurs_i)
+    
+  kernel = signal.gaussian(28, 7)
+  NbOccursSmooth = np.convolve(NbOccurs, kernel, mode='same')
+  accroiss = np.diff(NbOccursSmooth, append=[0])
+  accroissSmooth = np.convolve(accroiss, kernel, mode='same')
+  second = np.diff(accroissSmooth, append=[0])
+  secondSmooth = np.convolve(second, kernel, mode='same')
+
+  threshold = np.argmin(secondSmooth)
+  while secondSmooth[threshold+1] < 0:
+    threshold += 1
+
+  print(threshold)
+
+  file2 = file1.copy()
+  file2[file2 < threshold] = 0
+
+  return file2
