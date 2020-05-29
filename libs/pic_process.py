@@ -221,6 +221,6 @@ def second_inflexion_point(file1):
   print(threshold)
 
   file2 = file1.copy()
-  file2[file2 < threshold] = 0
+  file2[file2 < threshold] = threshold
 
   return file2

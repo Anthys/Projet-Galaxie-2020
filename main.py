@@ -21,11 +21,12 @@ def main(myFile):
     global args
 
     file1, name, ext = get_image(myFile)
-    
+    name = name[:20]
 
-    # Réhausser le contraste # ?? (comment multiplier par k peut augmenter le contraste ?)
-    #if args.contrastLinear:
-        #file1 = contrastLinear(file1, args.contrastLinear)
+    # ci-dessous : tentative d'éliminer le bruit avant le calcul des mf
+    #file1 = second_inflexion_point(file1)
+    #file1 = cool_range(file1)
+
         
     # Tronquer la fonction à args.max  
     max_lin = 40
@@ -89,7 +90,7 @@ def init_args():
     parser.add_argument("-m", dest="max", help="maximum of the linear space", type = int)
     parser.add_argument("-n", "--normalize", action="store_true", help="normalize the curves")
     parser.add_argument("-dat", "--dat", action="store_true", help="Force the DAT format processing")
-    parser.add_argument("-smooth", "--smooth", type = int, help="smooth", default=1)
+    parser.add_argument("-smooth", "--smooth", type = int, help="smooth", default=0)
     args = parser.parse_args()
 
     args.fantom = True
