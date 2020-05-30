@@ -39,10 +39,13 @@ def build_data_matrix(images_path, max_iter=300):
     if i > max_iter:
       break
     if ext=="fits" or ext==".dat":
-      print("Fichier trouvé, en cours de process")
+      print("Fichier trouvé, en cours de process")  
       image_file = images_path + "/" + v
 
       data_fonctionnelles = get_image(image_file)[0]
+      #data_fonctionnelles = second_inflexion_point(data_fonctionnelles)
+      #data_fonctionnelles = cool_range(data_fonctionnelles)
+      #data_fonctionnelles = smooth_file(data_fonctionnelles, 2)
       #data_fonctionnelles = contrastLinear(data_fonctionnelles[0], 10**4)
 
       F,U,Chi = calcul_fonctionelles(data_fonctionnelles, 256)
@@ -339,7 +342,7 @@ def build_data_matrix2(images_path, max_iter=300):
   list_of_names = []
   
   for i,v in enumerate(images_list):
-    name = v.split(".")[0]
+    name = v.split(".")[0 ]
     ext = v[-4:]
     print('index :', i)
     print('name :', name)
@@ -352,6 +355,7 @@ def build_data_matrix2(images_path, max_iter=300):
       image_file = images_path + "/" + v
 
       data_fonctionnelles = get_image(image_file)[0]
+      #data_fonctionnelles = smooth_file(data_fonctionnelles, 2)
 
       F,U,Chi = calcul_fonctionelles(data_fonctionnelles, 256)
       F,U,Chi = np.array(F), np.array(U), np.array(Chi)
@@ -482,6 +486,8 @@ def plot_DATA_2D_in_clusters(DATA, labels):
   r"$\mathcal{O}$", r"$\mathcal{P}$", r"$\mathcal{Q}$", r"$\mathcal{R}$", r"$\mathcal{S}$",
   r"$\mathcal{T}$", r"$\mathcal{U}$", r"$\mathcal{V}$", r"$\mathcal{W}$", r"$\mathcal{X}$",
   r"$\mathcal{Y}$", r"$\mathcal{Z}$"]
+  cols = ["blue", "orange", "green", "red", "purple", "grey", "brown", "pink", "purple", "cyan", "beige", "deeppink"]
+    
 
   for k in range(K+1):  
     l_x = []
@@ -494,7 +500,7 @@ def plot_DATA_2D_in_clusters(DATA, labels):
         l_x.append(x1)
         l_y.append(y1)
 
-    plt.scatter(l_x, l_y,cmap="viridis", marker=markerslist[k], label="Group "+markerslist[k])
+    plt.scatter(l_x, l_y,cmap="viridis", marker=markerslist[k],label="Group "+markerslist[k], color = cols[k]) #,edgecolor='black', linewidth='3')
 
   plt.gca().set_xlabel(r"Projection sur $X'_1$ (en unité de $\sigma'_1$)")
   plt.gca().set_ylabel(r"Projection sur $X'_2$ (en unité de $\sigma'_2$)")
@@ -516,12 +522,13 @@ def print_names_in_cluster(DATA, labels, names):
 def show_images_from_names(names, folder, n):
   iterm = min(len(names), n*n)
   curi = 0
-  size_window = [5, 5]
+  size_window = [7, 7]
   fig = plt.figure(figsize = (*size_window,))
 
   for i in range(iterm):
     v = names[i]
     try:
+      print(v)
       img = get_image(folder + "/" + v)[0]
     except Exception as e:
       pass
@@ -529,5 +536,7 @@ def show_images_from_names(names, folder, n):
       curi += 1
       plt.subplot(n,n, curi)
       plt.imshow(img, cmap="viridis")
+    
+  plt.tight_layout()
 
   plt.show()

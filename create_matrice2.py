@@ -76,27 +76,30 @@ def main():
         separ_DATA[v] += [indiv]
       for k,v in separ_DATA.items():
         separ_DATA[k] = np.float64(separ_DATA[k])
-      cols = ["blue", "orange", "green", "yellow", "red", "grey", "brown", "pink", "purple", "cyan", "beige", "deeppink"]
+      cols = ["blue", "orange", "green", "red", "purple", "grey", "brown", "pink", "purple", "cyan", "beige", "deeppink"]
     
       mxi = min(5, len(cols), len(separ_DATA.keys()))
-      size_window = [12,8]
+      size_window = [10,4]
       fig = plt.figure(figsize = (*size_window,))
       fig.add_subplot(1,4,2)
       for i,k in enumerate(separ_DATA.keys()):
         if i < mxi:
           mt.global_curve2(separ_DATA[k][:,:100], cols[i])
+      plt.title("Aire F")
       fig.add_subplot(1,4,3)
       for i,k in enumerate(separ_DATA.keys()):
         if i < mxi:
           mt.global_curve2(separ_DATA[k][:,100:200], cols[i])
+      plt.title("Périmètre U")
       fig.add_subplot(1,4,4)
       for i,k in enumerate(separ_DATA.keys()):
         if i < mxi:
           mt.global_curve2(separ_DATA[k][:,200:300], cols[i])
-
+      plt.title(r"Caractéristique d'Euler $\chi$")
 
     fig.add_subplot(1,4,1)
     plot_DATA_2D_in_clusters(new_DATA, labels)
+    plt.tight_layout( )
     plt.show()
 
 

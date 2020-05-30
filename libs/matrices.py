@@ -135,13 +135,13 @@ def global_curve2(data, col="blue"):
   final = []
   for parameter in data:
     final += [[np.mean(parameter), np.std(parameter)]]
-  x = [i for i in range(len(final))]
+  x = [i/len(final)*255 for i in range(len(final))]
   print(final[0][0])
   means = [i[0] for i in final]
   stds = [i[1] for i in final]
   ax = plt.gca()
   ax.plot(x, means, color = col)
-  ax.fill_between(x, [means[i]+stds[i] for i in range(len(x))], [means[i]-stds[i] for i in range(len(x))], facecolor=col, alpha=0.5)
+  ax.fill_between(x, [means[i]+stds[i]*.3 for i in range(len(x))], [means[i]-stds[i]*.3 for i in range(len(x))], facecolor=col, alpha=0.2)
 
 def val_prop_espace(valeursPropres):
   """ Rends les valeurs propres triées de la plus informative à la moins informative, sous la forme (val, pourcentage, indice de l'espace propre) """
