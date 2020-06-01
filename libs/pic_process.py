@@ -130,7 +130,10 @@ def degradePIL(file1, val):
     assert type(val) == int
     img1 = np.float64(file1)
     img2 = Image.fromarray(img1)
-    return img2.resize((math.floor(img1.shape[1] / val), math.floor(img1.shape[0] / val)), resample=0)
+    img2 = img2.resize((math.floor(img1.shape[1] / val), math.floor(img1.shape[0] / val)), resample=0)
+    img2 = np.float64(img2)
+    return img2
+
 
 def pepper_and_salt(file2, pourcentage):
     file1 = file2.copy()
