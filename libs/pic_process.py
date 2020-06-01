@@ -7,6 +7,7 @@ from scipy import signal
 from astropy.convolution import Gaussian2DKernel
 from random import *
 from copy import copy
+from PIL import Image
 
 
 
@@ -123,6 +124,13 @@ def degrade(file1, val):
             img2[i] += [moyenne]
     img2 = np.float64(img2)
     return img2
+  
+def degradePIL(file1, val):
+    """ Dégrade la qualité d'une image en diminuant son nombre de pixels, val est le facteur de division """
+    assert type(val) == int
+    img1 = np.float64(file1)
+    img2 = Image.fromarray(img1)
+    return img2.resize((math.floor(img1.shape[1] / val), math.floor(img1.shape[0] / val)), resample=0)
 
 def pepper_and_salt(file2, pourcentage):
     file1 = file2.copy()
