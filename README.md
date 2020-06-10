@@ -1,5 +1,9 @@
 # Projet-Galaxie-2020
 
+Rapport de projet : [ICI](./Projet_Galaxies_fin.pdf)
+
+Présentation: [ICI](Presentation_galaxies___.pdf)
+
 ## Arborescence
 
 | Fichier | Contenu | Type |
